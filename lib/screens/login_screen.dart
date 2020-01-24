@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-
-final FirebaseAuth _auth = FirebaseAuth.instance;
-final GoogleSignIn googleSignIn = GoogleSignIn();
-
+import 'package:generic_bloc_provider/generic_bloc_provider.dart';
+import 'package:weather_oauth/blocs/login_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -13,9 +9,12 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
+  LoginBloc _bloc;
+
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _bloc = BlocProvider.of<LoginBloc>(context);
   }
 
   @override
@@ -41,22 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           color: Colors.blueAccent,
-          onPressed: () async {
-            print('logging in');
-            final GoogleSignInAccount googleSignInAccount = await GoogleSignIn().signIn();
-            final GoogleSignInAuthentication googleSignInAuthentication =
-                await googleSignInAccount.authentication;
-
-            final AuthCredential credential = GoogleAuthProvider.getCredential(
-              accessToken: googleSignInAuthentication.accessToken,
-              idToken: googleSignInAuthentication.idToken,
-            );
-
-            final AuthResult authResult = await _auth.signInWithCredential(credential);
-            final FirebaseUser user = authResult.user;
-
-            print('Signed in with $user');
-          },
+          onPressed: () => _bloc.authenticateUser(),
         ),
       ),
     );
