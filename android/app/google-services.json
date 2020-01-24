@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "67263604687",
+    "firebase_url": "https://openweatherauth.firebaseio.com",
+    "project_id": "openweatherauth",
+    "storage_bucket": "openweatherauth.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:67263604687:android:3cf057ff4b3d28a90694ba",
+        "android_client_info": {
+          "package_name": "com.elkcreek.weatheroauth.weather_oauth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "67263604687-se47rdsu071nf4fotutpcqst7nk9o7k1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.elkcreek.weatheroauth.weather_oauth",
+            "certificate_hash": "42ff13079d3f8e4bffbac14a51d8664e146e8858"
+          }
+        },
+        {
+          "client_id": "67263604687-imggkal944flc16ggq5nolhoqj5c8jku.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPOb4wEg7oTZvYxPZFojcrShn68qKkyJU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "67263604687-imggkal944flc16ggq5nolhoqj5c8jku.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "67263604687-qncri61l0h1s15g12h1hlsoo6g77qdfe.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.elkcreek.weatheroauth.weatherOauth"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
