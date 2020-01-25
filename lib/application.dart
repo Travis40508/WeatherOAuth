@@ -19,6 +19,9 @@ class Application extends StatelessWidget {
         bloc: LoginBloc(_repository),
         child: LoginScreen(),
       ),
+      routes: {
+        
+      },
     );
   }
 }
