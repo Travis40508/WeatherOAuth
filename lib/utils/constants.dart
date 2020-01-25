@@ -1,5 +1,6 @@
 
 class Constants {
+  static const appTitle = 'Weather OAuth';
   static const empty = '';
   static const splashWaitDurationInSeconds = 2;
 

@@ -34,20 +34,33 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
-      ),
+      backgroundColor: Theme.of(context).backgroundColor,
 
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('Splash!'),
-            StreamBuilder(
-              stream: _bloc.displayNameStream,
-              builder: (context, AsyncSnapshot<String> snapshot) {
-                return snapshot.hasData ? Text(_bloc?.fetchGreeting(snapshot?.data)) : Container();
-              },
+            Icon(
+                Icons.wb_sunny,
+              size: 128.0,
+              color: Theme.of(context).iconTheme.color,
+            ),
+            Text(
+                Constants.appTitle,
+              style: Theme.of(context).textTheme.title,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: StreamBuilder(
+                stream: _bloc.displayNameStream,
+                builder: (context, AsyncSnapshot<String> snapshot) {
+                  return snapshot.hasData ? Text(
+                      _bloc?.fetchGreeting(snapshot?.data),
+                    style: Theme.of(context).textTheme.subtitle,
+                    textAlign: TextAlign.center,
+                  ) : Container();
+                },
+              ),
             )
           ],
         ),
@@ -63,7 +76,9 @@ class _SplashScreenState extends State<SplashScreen> {
     }, onError: (e) {
       ///it's good practice to use an empty route object to enforce consistent behavior for navigation
       ///this will ensure that later on we don't go to a screen without necessary data
-      Navigator.of(context).pushReplacementNamed(LoginRoute.routeName, arguments: LoginRoute());
+      Future.delayed(Duration(seconds: 2), () {
+        Navigator.of(context).pushReplacementNamed(LoginRoute.routeName, arguments: LoginRoute());
+      });
     });
   }
 }
