@@ -2,6 +2,7 @@ import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:weather_oauth/blocs/splash_bloc.dart';
 import 'package:weather_oauth/services/repository.dart';
+import 'package:weather_oauth/utils/constants.dart';
 
 import 'mocks/mock_repository.dart';
 
@@ -36,6 +37,18 @@ void main() {
 
       expectLater(_bloc.displayNameStream, emitsInOrder([
         emitsError(error)
+      ]));
+
+      _bloc.fetchFirebaseToken();
+    });
+
+    test('error when displayName is empty', () {
+      final displayName = Constants.empty;
+
+      when(_repository.authenticateUser()).thenAnswer((_) => Stream.value(displayName));
+
+      expectLater(_bloc.displayNameStream, emitsInOrder([
+        emitsError(anything)
       ]));
 
       _bloc.fetchFirebaseToken();

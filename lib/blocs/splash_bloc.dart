@@ -14,7 +14,13 @@ class SplashBloc extends Bloc {
 
 
   void fetchFirebaseToken() {
-    _repository.authenticateUser().listen((displayName) => _displayNameSubject.add(displayName), onError: (e) {
+    _repository.authenticateUser().listen((displayName) {
+      if (displayName.isNotEmpty) {
+        _displayNameSubject.add(displayName);
+      } else {
+        _displayNameSubject.addError('displayName shouldn\nt be empty');
+      }
+    }, onError: (e) {
       print('SplashBloc.fetchFirebaseToken - $e');
       _displayNameSubject.addError(e);
     });
