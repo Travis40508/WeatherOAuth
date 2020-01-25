@@ -7,5 +7,8 @@ import 'package:weather_oauth/models/location_current_forecast.dart';
 abstract class Repository {
 
   Stream<String> authenticateUser(final bool signInSilently);
-  Stream<List<LocalForecast>> fetchWeatherData(final String location);
+  Stream<LocalForecast> fetchWeatherDataForLocation(final String location);
+  Stream<List<LocalForecast>> fetchAllWeatherData();
+  Stream<bool> removeLocation(final String location);
+  Stream<bool> saveNewLocation(final String location);
 }

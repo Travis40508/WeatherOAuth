@@ -3,12 +3,18 @@
 import 'dart:math';
 
 import 'package:weather_oauth/models/local_forecast.dart';
-import 'package:weather_oauth/models/location_current_forecast.dart';
 
 class MockData {
 
   static LocalForecast getMockLocalForecast() {
-    LocalForecast localForecast = LocalForecast(Weather.fromJson(Map()), Temperatures.fromJson(Map()), Random().nextInt(100).toString(), Random().nextInt(100).toString());
+    LocalForecast localForecast = LocalForecast(
+        'fooDesc',
+        'fooIcon',
+        Random().nextInt(250).toDouble(),
+        Random().nextInt(100).toDouble(),
+        Random().nextInt(250).toDouble(),
+        Random().nextInt(100).toString(),
+        Random().nextInt(100).toString());
 
     return localForecast;
   }

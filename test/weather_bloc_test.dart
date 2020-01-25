@@ -1,9 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:weather_oauth/blocs/weather_bloc.dart';
+import 'package:weather_oauth/models/local_forecast.dart';
 import 'package:weather_oauth/models/location_current_forecast.dart';
 import 'package:weather_oauth/services/repository.dart';
 
+import 'mocks/mock_data.dart';
 import 'mocks/mock_repository.dart';
 
 
@@ -18,16 +20,72 @@ void main() {
   });
 
   group('modifying saved locations', () {
-    test('adding new place successfully', () {
+    test('adding new place successfully when there are existing forecasts', () {
       final location = 'foo';
-      final LocationCurrentForecastRes res = LocationCurrentForecastRes.fromJson(Map());
+      final List<LocalForecast> forecasts = MockData.getMockLocalForecastList(4);
+      final LocalForecast foreCastForFoo = MockData.getMockLocalForecast();
 
-      when(_repository.fetchWeatherData(location)).thenAnswer((_) => Stream.value(res));
+      when(_repository.fetchAllWeatherData()).thenAnswer((_) => Stream.value(forecasts));
 
-      expectLater(_bloc.forecastsStream, emits(res));
+      when(_repository.fetchWeatherDataForLocation(location)).thenAnswer((_) => Stream.value(foreCastForFoo));
+
+      List newForecasts = List();
+      newForecasts.addAll(forecasts);
+      newForecasts.add(foreCastForFoo);
+
+      expectLater(_bloc.forecastsStream, emitsInOrder([
+        emits(forecasts),
+        emits(newForecasts)
+      ]));
+
+      _bloc.fetchAllForecastsForUser();
+      _bloc.fetchForecastForLocation(location);
+    });
+
+    test('adding new place successfully when there are no existing forecasts', () {
+      final location = 'foo';
+      final LocalForecast foreCastForFoo = MockData.getMockLocalForecast();
+      final List<LocalForecast> forecasts = List();
+
+      when(_repository.fetchAllWeatherData()).thenAnswer((_) => Stream.value(forecasts));
+
+      when(_repository.fetchWeatherDataForLocation(location)).thenAnswer((_) => Stream.value(foreCastForFoo));
+
+      List newForecasts = List();
+      newForecasts.addAll(forecasts);
+      newForecasts.add(foreCastForFoo);
+
+      expectLater(_bloc.forecastsStream, emitsInOrder([
+        emits(forecasts),
+        emits(newForecasts)
+      ]));
+
+      _bloc.fetchAllForecastsForUser();
+      _bloc.fetchForecastForLocation(location);
     });
 
     test('deleting place successfully', () {
+      final List<LocalForecast> forecasts = MockData.getMockLocalForecastList(4);
+      final String locationToDelete = forecasts[2]?.locationName;
+
+      when(_repository.fetchAllWeatherData()).thenAnswer((_) => Stream.value(forecasts));
+      when(_repository.removeLocation(locationToDelete)).thenAnswer((_) => Stream.value(true));
+
+      List<LocalForecast> newForecasts = List();
+      newForecasts.addAll(forecasts);
+
+      newForecasts.removeWhere((forecast) => forecast.locationName == locationToDelete);
+
+      expectLater(_bloc.forecastsStream, emitsInOrder([
+        emits(forecasts),
+        emits(newForecasts)
+      ]));
+
+      _bloc.fetchAllForecastsForUser();
+      _bloc.removeLocation(locationToDelete);
+    });
+
+    test('checking all locations and there are not any', () {
 
     });
 

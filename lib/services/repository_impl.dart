@@ -18,8 +18,26 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Stream<List<LocalForecast>> fetchWeatherData(String location) {
+  Stream<LocalForecast> fetchWeatherDataForLocation(String location) {
     // TODO: implement fetchWeatherData
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<bool> removeLocation(String location) {
+    // TODO: implement removeLocation
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<List<LocalForecast>> fetchAllWeatherData() {
+    // TODO: implement fetchAllWeatherData
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<bool> saveNewLocation(String location) {
+    // TODO: implement saveNewLocation
     throw UnimplementedError();
   }
 

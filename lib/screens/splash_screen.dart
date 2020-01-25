@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void didChangeDependencies() {
     _bloc = BlocProvider.of<SplashBloc>(context);
-    _bloc.fetchFirebaseToken();
+    _bloc?.fetchFirebaseToken();
 
     listenForNavigation();
     super.didChangeDependencies();
@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void dispose() {
-    _bloc.dispose();
+    _bloc?.dispose();
     super.dispose();
   }
 
