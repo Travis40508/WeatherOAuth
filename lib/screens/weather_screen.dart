@@ -13,12 +13,21 @@ class _WeatherScreenState extends State<WeatherScreen> {
   @override
   void didChangeDependencies() {
     _route = ModalRoute.of(context).settings.arguments;
-    print(_route.displayName);
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blueAccent,
+        title: Text(
+            _route.displayName,
+          style: TextStyle(
+            color: Colors.white
+          ),
+        ),
+      ),
+    );
   }
 }

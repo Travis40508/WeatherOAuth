@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:weather_oauth/blocs/login_bloc.dart';
+import 'package:weather_oauth/routing/weather_route.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -16,7 +17,9 @@ class _LoginScreenState extends State<LoginScreen> {
     super.didChangeDependencies();
     _bloc = BlocProvider.of<LoginBloc>(context);
 
-
+    _bloc.authResultStream.listen((displayName) {
+      Navigator.of(context).pushNamed(WeatherRoute.routeName, arguments: WeatherRoute(displayName));
+    }, onError: (e) => print(e));
   }
 
   @override
