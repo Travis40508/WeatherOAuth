@@ -1,12 +1,30 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:weather_oauth/blocs/weather_bloc.dart';
+import 'package:weather_oauth/models/location_current_forecast.dart';
+import 'package:weather_oauth/services/repository.dart';
+
+import 'mocks/mock_repository.dart';
 
 
 void main() {
 
+  Repository _repository;
+  WeatherBloc _bloc;
+
+  setUp(() {
+    _repository = MockRepository();
+    _bloc = WeatherBloc(_repository);
+  });
+
   group('modifying saved locations', () {
     test('adding new place successfully', () {
+      final location = 'foo';
+      final LocationCurrentForecastRes res = LocationCurrentForecastRes.fromJson(Map());
 
+      when(_repository.fetchWeatherData(location)).thenAnswer((_) => Stream.value(res));
+
+      expectLater(_bloc.forecastsStream, emits(res));
     });
 
     test('deleting place successfully', () {
