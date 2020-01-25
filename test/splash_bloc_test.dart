@@ -1,5 +1,6 @@
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:weather_oauth/blocs/splash_bloc.dart';
 import 'package:weather_oauth/services/repository.dart';
 
 import 'mocks/mock_repository.dart';
