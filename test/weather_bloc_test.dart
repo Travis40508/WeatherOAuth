@@ -56,7 +56,7 @@ void main() {
       newForecasts.add(foreCastForFoo);
 
       expectLater(_bloc.forecastsStream, emitsInOrder([
-        emits(forecasts),
+        emitsError(anything),
         emits(newForecasts)
       ]));
 
@@ -85,8 +85,15 @@ void main() {
       _bloc.removeLocation(locationToDelete);
     });
 
-    test('checking all locations and there are not any', () {
+    test('checking all locations and succeeds if there are not any', () {
 
+      when(_repository.fetchAllWeatherData()).thenAnswer((_) => Stream.value(null));
+
+      expectLater(_bloc.forecastsStream, emitsInOrder([
+        emitsError(anything)
+      ]));
+
+      _bloc.fetchAllForecastsForUser();
     });
 
     test('stopping user from adding more than 5 places successfully', () {

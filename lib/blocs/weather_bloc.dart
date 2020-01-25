@@ -33,7 +33,11 @@ class WeatherBloc extends Bloc {
 
   void fetchAllForecastsForUser() {
     _repository.fetchAllWeatherData().listen((forecasts) {
-      _forecastsSubject.add(forecasts);
+      if (forecasts != null && forecasts.isNotEmpty) {
+        _forecastsSubject.add(forecasts);
+      } else {
+        _forecastsSubject.addError('No locations available');
+      }
     }, onError: (e) {
       print('WeatherBloc.fetchAllForecastsForUser() -. $e');
       _forecastsSubject.addError(e);
