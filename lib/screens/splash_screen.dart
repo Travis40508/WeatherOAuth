@@ -5,6 +5,7 @@ import 'package:weather_oauth/routing/login_route.dart';
 import 'package:weather_oauth/routing/weather_route.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weather_oauth/utils/constants.dart';
+import 'package:weather_oauth/utils/size_config.dart';
 
 
 class SplashScreen extends StatefulWidget {
@@ -42,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
           children: <Widget>[
             Icon(
                 Icons.wb_sunny,
-              size: 128.0,
+              size: SizeConfig.getHalfWidthOfScreen(context),
               color: Theme.of(context).iconTheme.color,
             ),
             Text(
