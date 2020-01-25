@@ -5,7 +5,7 @@ import 'package:weather_oauth/routing/login_route.dart';
 import 'package:weather_oauth/routing/weather_route.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weather_oauth/utils/constants.dart';
-import 'package:weather_oauth/utils/size_config.dart';
+import 'package:weather_oauth/widgets/splash_tile.dart';
 
 
 class SplashScreen extends StatefulWidget {
@@ -37,38 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
 
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Hero(
-              tag: Constants.sunHeroTag,
-              child: Icon(
-                  Icons.wb_sunny,
-                size: SizeConfig.getHalfWidthOfScreen(context),
-                color: Theme.of(context).iconTheme.color,
-              ),
-            ),
-            Text(
-                Constants.appTitle,
-              style: Theme.of(context).textTheme.title,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(Constants.defaultPadding),
-              child: StreamBuilder(
-                stream: _bloc.displayNameStream,
-                builder: (context, AsyncSnapshot<String> snapshot) {
-                  return snapshot.hasData ? Text(
-                      _bloc?.fetchGreeting(snapshot?.data),
-                    style: Theme.of(context).textTheme.subtitle,
-                    textAlign: TextAlign.center,
-                  ) : Container();
-                },
-              ),
-            )
-          ],
-        ),
-      ),
+      body: SplashTile()
     );
   }
 
