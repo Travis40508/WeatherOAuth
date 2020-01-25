@@ -18,7 +18,7 @@ void main() {
 
     test('authentication happy path', () {
       final displayName = "foo";
-      when(_repository.authenticateUser()).thenAnswer((_) => Stream.value(displayName));
+      when(_repository.authenticateUser(false)).thenAnswer((_) => Stream.value(displayName));
 
       expectLater(_bloc.authResultStream, emitsInOrder([
         emits(displayName)
@@ -29,7 +29,7 @@ void main() {
 
     test('authentication error scenario', () {
       final error = Error();
-      when(_repository.authenticateUser()).thenAnswer((_) => Stream.error(error));
+      when(_repository.authenticateUser(false)).thenAnswer((_) => Stream.error(error));
 
       expectLater(_bloc.authResultStream, emitsInOrder([
         emitsError(error)

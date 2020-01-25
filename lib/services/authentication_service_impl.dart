@@ -26,6 +26,9 @@ class AuthenticationServiceImpl implements AuthenticationService {
 
     final AuthResult authResult = await _auth?.signInWithCredential(credential);
 
+    ///throw an exception if signing in fails so that the user is kicked to the login screen
+    assert(authResult.user.displayName.isNotEmpty);
+
     return authResult;
   }
 

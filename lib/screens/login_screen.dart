@@ -18,7 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
     _bloc = BlocProvider.of<LoginBloc>(context);
 
     _bloc.authResultStream.listen((displayName) {
-      Navigator.of(context).pushNamed(WeatherRoute.routeName, arguments: WeatherRoute(displayName));
+      Navigator.of(context).pushReplacementNamed(WeatherRoute.routeName, arguments: WeatherRoute(displayName));
     }, onError: (e) => print(e));
   }
 

@@ -20,7 +20,7 @@ void main() {
     test('emitting displayName on token received', () {
       final displayName = 'foo';
 
-      when(_repository.authenticateUser()).thenAnswer((_) => Stream.value(displayName));
+      when(_repository.authenticateUser(true)).thenAnswer((_) => Stream.value(displayName));
 
       expectLater(_bloc.displayNameStream, emitsInOrder([
         emits(displayName)
@@ -33,7 +33,7 @@ void main() {
     test('on failed to retrieve token', () {
       final error = Error();
 
-      when(_repository.authenticateUser()).thenAnswer((_) => Stream.error(error));
+      when(_repository.authenticateUser(true)).thenAnswer((_) => Stream.error(error));
 
       expectLater(_bloc.displayNameStream, emitsInOrder([
         emitsError(error)
@@ -45,7 +45,7 @@ void main() {
     test('error when displayName is empty', () {
       final displayName = Constants.empty;
 
-      when(_repository.authenticateUser()).thenAnswer((_) => Stream.value(displayName));
+      when(_repository.authenticateUser(true)).thenAnswer((_) => Stream.value(displayName));
 
       expectLater(_bloc.displayNameStream, emitsInOrder([
         emitsError(anything)
