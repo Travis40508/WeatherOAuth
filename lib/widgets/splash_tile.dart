@@ -44,7 +44,7 @@ class _SplashTileState extends State<SplashTile> {
               builder: (context, AsyncSnapshot<String> snapshot) {
                 return snapshot.hasData ? Text(
                   _bloc?.fetchGreeting(snapshot?.data),
-                  style: Theme.of(context).textTheme.subtitle,
+                  style: Theme.of(context).textTheme?.subtitle,
                   textAlign: TextAlign.center,
                 ) : Container();
               },
