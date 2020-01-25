@@ -41,17 +41,20 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(
-                Icons.wb_sunny,
-              size: SizeConfig.getHalfWidthOfScreen(context),
-              color: Theme.of(context).iconTheme.color,
+            Hero(
+              tag: Constants.sunHeroTag,
+              child: Icon(
+                  Icons.wb_sunny,
+                size: SizeConfig.getHalfWidthOfScreen(context),
+                color: Theme.of(context).iconTheme.color,
+              ),
             ),
             Text(
                 Constants.appTitle,
               style: Theme.of(context).textTheme.title,
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(Constants.defaultPadding),
               child: StreamBuilder(
                 stream: _bloc.displayNameStream,
                 builder: (context, AsyncSnapshot<String> snapshot) {
@@ -73,11 +76,12 @@ class _SplashScreenState extends State<SplashScreen> {
     _bloc.displayNameStream
         .debounce((_) => TimerStream(true, Duration(seconds: Constants.splashWaitDurationInSeconds)))
         .listen((displayName) {
-      Navigator.of(context).pushReplacementNamed(WeatherRoute.routeName, arguments: WeatherRoute(displayName));
+          Navigator.of(context).pushReplacementNamed(LoginRoute.routeName, arguments: LoginRoute());
+//      Navigator.of(context).pushReplacementNamed(WeatherRoute.routeName, arguments: WeatherRoute(displayName));
     }, onError: (e) {
       ///it's good practice to use an empty route object to enforce consistent behavior for navigation
       ///this will ensure that later on we don't go to a screen without necessary data
-      Future.delayed(Duration(seconds: 2), () {
+      Future.delayed(Duration(seconds: Constants.splashWaitDurationInSeconds), () {
         Navigator.of(context).pushReplacementNamed(LoginRoute.routeName, arguments: LoginRoute());
       });
     });

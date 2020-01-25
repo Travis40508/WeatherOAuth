@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:weather_oauth/blocs/login_bloc.dart';
 import 'package:weather_oauth/routing/weather_route.dart';
+import 'package:weather_oauth/utils/constants.dart';
+import 'package:weather_oauth/utils/size_config.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -31,27 +33,43 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.blueAccent,
-        title: Text(
-          'OAuth!',
-          style: TextStyle(
-            color: Colors.white
-          ),
-        ),
-      ),
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Center(
-        child: RaisedButton(
-          child: Text(
-            'Login',
-            style: TextStyle(
-              color: Colors.white
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Hero(
+              tag: Constants.sunHeroTag,
+              child: Icon(
+                Icons.wb_sunny,
+                size: SizeConfig.getHalfWidthOfScreen(context),
+              ),
             ),
-          ),
-          color: Colors.blueAccent,
-          onPressed: () => _bloc.authenticateUser(),
+            Card(
+              elevation: Constants.defaultElevation,
+              color: Theme.of(context).appBarTheme.color,
+              child: Container(
+                width: SizeConfig.getHalfWidthOfScreen(context),
+                height: SizeConfig.getPercentageOfScreenHeight(10, context),
+                child: InkWell(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(Constants.defaultPadding),
+                        child: Icon(Icons.lock),
+                      ),
+                      Text(
+                        Constants.loginWithGoogle,
+                        style: Theme.of(context).textTheme.subhead,
+                      ),
+                    ],
+                  ),
+                  onTap: () => _bloc.authenticateUser(),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

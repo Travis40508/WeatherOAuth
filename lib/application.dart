@@ -27,9 +27,13 @@ class Application extends StatelessWidget {
       title: Constants.appTitle,
       debugShowCheckedModeBanner: false,
       home: BlocProvider(
-          bloc: SplashBloc(_repository),
-          child: SplashScreen()
+        bloc: LoginBloc(_repository),
+        child: LoginScreen(),
       ),
+//      home: BlocProvider(
+//          bloc: SplashBloc(_repository),
+//          child: SplashScreen()
+//      ),
       routes: {
         LoginRoute.routeName : (context) => BlocProvider(
           bloc: LoginBloc(_repository),
@@ -47,21 +51,26 @@ class Application extends StatelessWidget {
           textTheme: TextTheme(
               title: TextStyle(
                   color: secondaryColor,
-                  fontSize: 18.0
+                  fontSize: Constants.smallText,
               ),
           ),
         ),
         textTheme: TextTheme(
           title: TextStyle(
             color: secondaryColor,
-            fontSize: 48.0,
+            fontSize: Constants.largeText,
             fontWeight: FontWeight.bold
           ),
           subtitle: TextStyle(
               color: secondaryColor,
-              fontSize: 36.0,
+              fontSize: Constants.mediumText,
               fontWeight: FontWeight.bold
           ),
+          subhead: TextStyle(
+            color: secondaryColor,
+            fontSize: Constants.smallText,
+            fontWeight: FontWeight.bold
+          )
         )
       ),
     );

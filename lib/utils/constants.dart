@@ -6,4 +6,16 @@ class Constants {
 
   //UI strings
   static const welcomeBack = 'Welcome Back';
+  static const loginWithGoogle = 'Login with Google';
+
+
+  //tags
+  static const sunHeroTag = "sun_her_tag";
+
+  //defaults
+  static const defaultPadding = 8.0;
+  static const defaultElevation = 8.0;
+  static const largeText = 48.0;
+  static const mediumText = 36.0;
+  static const smallText = 18.0;
 }
