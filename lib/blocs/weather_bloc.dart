@@ -13,25 +13,45 @@ class WeatherBloc extends Bloc {
   final _forecastsSubject = BehaviorSubject<List<LocalForecast>>();
   Stream<List<LocalForecast>> get forecastsStream => _forecastsSubject.stream;
 
+  final _errorSubject = PublishSubject<String>();
+  Stream<String> get errorStream => _errorSubject.stream;
+
   WeatherBloc(this._repository);
 
   @override
   void dispose() {
     _forecastsSubject.close();
+    _errorSubject.close();
   }
 
   void fetchForecastForLocation(final String location) {
-    _repository.fetchWeatherDataForLocation(location).listen((forecast) {
-      List<LocalForecast> forecasts = _forecastsSubject.value ?? List();
-      forecasts?.add(forecast);
-      _forecastsSubject.add(forecasts);
-    }, onError: (e) {
-      print('WeatherBloc - $e');
-      _forecastsSubject.addError(e);
-    });
+    if (_forecastsSubject.value == null || (_forecastsSubject.value.length < 5 && !locationAlreadyExists(location))) {
+      _repository.fetchWeatherDataForLocation(location).listen((forecast) {
+        List<LocalForecast> forecasts = _forecastsSubject.value ?? List();
+        forecasts?.add(forecast);
+        _forecastsSubject.add(forecasts);
+      }, onError: (e) {
+        print('WeatherBloc - $e');
+        _forecastsSubject.addError(e);
+      });
+    } else if (locationAlreadyExists(location)) {
+      _errorSubject.add("You have already added $location. Please add a unique location.");
+    } else {
+      _errorSubject.add("You already have 5 locations. Please remove one before trying to add another");
+    }
   }
 
-  void fetchAllForecastsForUser() {
+  bool locationAlreadyExists(final String locationName) {
+    bool alreadyExists = false;
+    if (_forecastsSubject.value != null) {
+      int indexOfIdenticalItem = _forecastsSubject.value.indexWhere((forecast) => forecast.locationName == locationName);
+      alreadyExists = indexOfIdenticalItem >= 0;
+    }
+
+    return alreadyExists;
+  }
+
+  void fetchAllForecastsForUser() async {
     _repository.fetchAllWeatherData().listen((forecasts) {
       if (forecasts != null && forecasts.isNotEmpty) {
         _forecastsSubject.add(forecasts);
