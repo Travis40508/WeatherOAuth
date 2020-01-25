@@ -25,11 +25,17 @@ class WeatherBloc extends Bloc {
   }
 
   void fetchForecastForLocation(final String location) {
-    if (_forecastsSubject.value == null || (_forecastsSubject.value.length < 5 && !locationAlreadyExists(location))) {
+    if (location == null || location.isEmpty) {
+      _errorSubject.add("Please add search criteria.");
+    } else if (_forecastsSubject.value == null || (_forecastsSubject.value.length < 5 && !locationAlreadyExists(location))) {
       _repository.fetchWeatherDataForLocation(location).listen((forecast) {
         List<LocalForecast> forecasts = _forecastsSubject.value ?? List();
-        forecasts?.add(forecast);
-        _forecastsSubject.add(forecasts);
+        if (forecast != null) {
+          forecasts?.add(forecast);
+          _forecastsSubject.add(forecasts);
+        } else {
+          _errorSubject.add("No location found. Please try again");
+        }
       }, onError: (e) {
         print('WeatherBloc - $e');
         _forecastsSubject.addError(e);

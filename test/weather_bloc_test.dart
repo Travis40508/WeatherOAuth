@@ -4,6 +4,7 @@ import 'package:weather_oauth/blocs/weather_bloc.dart';
 import 'package:weather_oauth/models/local_forecast.dart';
 import 'package:weather_oauth/models/location_current_forecast.dart';
 import 'package:weather_oauth/services/repository.dart';
+import 'package:weather_oauth/utils/constants.dart';
 
 import 'mocks/mock_data.dart';
 import 'mocks/mock_repository.dart';
@@ -147,11 +148,26 @@ void main() {
   });
 
   group('search', () {
-    test('not finding searched location', () {
+    test('not finding searched location', () async {
+      final String searchQuery = 'as8d7as9d87a9duasd';
 
+      when(_repository.fetchWeatherDataForLocation(searchQuery)).thenAnswer((_) => Stream.value(null));
+
+      expectLater(_bloc.errorStream, emitsInOrder([
+        emits(anything)
+      ]));
+
+      _bloc.fetchForecastForLocation(searchQuery);
     });
 
     test('searching for blank location', () {
+      final String searchQuery = Constants.empty;
+
+      expectLater(_bloc.errorStream, emitsInOrder([
+        emits(anything)
+      ]));
+
+      _bloc.fetchForecastForLocation(searchQuery);
 
     });
   });
