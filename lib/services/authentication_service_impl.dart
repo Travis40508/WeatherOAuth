@@ -5,9 +5,14 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthenticationServiceImpl implements AuthenticationService {
 
+  FirebaseAuth _auth;
+
   @override
   Future<AuthResult> fetchGoogleAuthentication() async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
+    if (_auth == null) {
+      _auth = FirebaseAuth.instance;
+    }
+
     final GoogleSignIn _googleSignIn = GoogleSignIn();
 
     final GoogleSignInAccount googleSignInAccount = await _googleSignIn?.signIn();

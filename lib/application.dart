@@ -20,7 +20,7 @@ class Application extends StatelessWidget {
         child: LoginScreen(),
       ),
       routes: {
-        
+
       },
     );
   }
