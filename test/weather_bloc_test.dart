@@ -171,18 +171,4 @@ void main() {
 
     });
   });
-
-  group('save functionality', () {
-    test('getting 5 local forecasts if there are 5 items in shared preferences on first load', () {
-
-    });
-
-    test('show no locations text on launch if shared pref size is 0', () {
-
-    });
-
-    test('show no locations text on removing of location if shared pref size is 0', () {
-
-    });
-  });
 }
