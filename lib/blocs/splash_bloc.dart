@@ -2,6 +2,7 @@
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weather_oauth/services/repository.dart';
+import 'package:weather_oauth/utils/constants.dart';
 
 class SplashBloc extends Bloc {
 
@@ -14,7 +15,7 @@ class SplashBloc extends Bloc {
 
 
   void fetchFirebaseToken() {
-    _repository.authenticateUser().listen((displayName) {
+    _repository.authenticateUser(true).listen((displayName) {
       if (displayName.isNotEmpty) {
         _displayNameSubject.add(displayName);
       } else {
@@ -24,6 +25,10 @@ class SplashBloc extends Bloc {
       print('SplashBloc.fetchFirebaseToken - $e');
       _displayNameSubject.addError(e);
     });
+  }
+
+  String fetchGreeting(String displayName) {
+    return '${Constants.welcomeBack}, $displayName!';
   }
 
   @override

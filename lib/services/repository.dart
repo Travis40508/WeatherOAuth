@@ -3,6 +3,6 @@
 
 abstract class Repository {
 
-  Stream<String> authenticateUser();
+  Stream<String> authenticateUser(final bool signInSilently);
 
 }

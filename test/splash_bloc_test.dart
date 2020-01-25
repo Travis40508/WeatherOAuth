@@ -55,4 +55,10 @@ void main() {
     });
 
   });
+
+  test('welcome back formatting is proper', () {
+    final displayName = 'foo';
+
+    expect(_bloc.fetchGreeting(displayName), 'Welcome Back, foo!');
+  });
 }

@@ -9,10 +9,10 @@ class RepositoryImpl implements Repository {
   final AuthenticationService _authService = AuthenticationServiceImpl();
 
   @override
-  Stream<String> authenticateUser() {
-    return Stream.fromFuture(_authService.fetchGoogleAuthentication())
-        .map((authentication) => authentication.user)
-        .map((user) => user.displayName);
+  Stream<String> authenticateUser(final bool signInSilently) {
+    return Stream.fromFuture(_authService.fetchGoogleAuthentication(signInSilently))
+        .map((authentication) => authentication?.user)
+        .map((user) => user?.displayName);
   }
 
 }

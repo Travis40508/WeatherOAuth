@@ -18,7 +18,7 @@ class LoginBloc extends Bloc {
   }
 
   void authenticateUser() {
-    _repository.authenticateUser().listen((user) {
+    _repository.authenticateUser(false).listen((user) {
       print('Successful login with user - $user');
       _authResultSubject.add(user);
     }, onError: (e) {

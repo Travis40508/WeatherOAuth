@@ -8,14 +8,15 @@ class AuthenticationServiceImpl implements AuthenticationService {
   FirebaseAuth _auth;
 
   @override
-  Future<AuthResult> fetchGoogleAuthentication() async {
+  Future<AuthResult> fetchGoogleAuthentication(final bool signInSilently) async {
     if (_auth == null) {
       _auth = FirebaseAuth.instance;
     }
 
     final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-    final GoogleSignInAccount googleSignInAccount = await _googleSignIn?.signIn();
+    final GoogleSignInAccount googleSignInAccount = signInSilently ? await _googleSignIn?.signInSilently(suppressErrors: false) : await _googleSignIn?.signIn();
+
     final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount?.authentication;
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
