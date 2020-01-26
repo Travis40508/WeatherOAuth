@@ -30,22 +30,13 @@ class WeatherBloc extends Bloc {
   void fetchForecastForLocation(final String userEmail, final String location) {
     _loadingSubject.add(true);
     if (location == null || location.isEmpty) {
-      _errorSubject.add("Please add search criteria.");
+      handleNoSearchTextScenario();
     } else if (_forecastsSubject.value == null || (_forecastsSubject.value.length < 5 && !locationAlreadyExists(location))) {
-      _repository.fetchWeatherDataForLocation(userEmail, location).listen((forecast) {
-        List<LocalForecast> forecasts = _forecastsSubject.value ?? List();
-          forecasts?.add(forecast);
-          _loadingSubject.add(false);
-          _forecastsSubject.add(forecasts);
-      }, onError: (e) {
-        print('WeatherBloc - $e');
-        _loadingSubject.add(false);
-        _errorSubject.add("No location found. Please try again");
-      });
+      attemptToAddLocation(userEmail, location);
     } else if (locationAlreadyExists(location)) {
-      _errorSubject.add("You have already added $location. Please add a unique location.");
+      handlelDuplicateLocationScenario(location);
     } else {
-      _errorSubject.add("You already have 5 locations. Please remove one before trying to add another");
+      handleTooManyLocationsScenario();
     }
   }
 
@@ -96,5 +87,37 @@ class WeatherBloc extends Bloc {
 
   String kelvinToFahrenheit(final dynamic kelvin) {
     return '${((kelvin - 273) * (9/5) + 32).toInt()}${Constants.degreeSymbol}';
+  }
+
+  ///Fires if the user attempts to search without text in the TextField
+  void handleNoSearchTextScenario() {
+    _loadingSubject.add(false);
+    _errorSubject.add("Please add search criteria.");
+  }
+
+  ///Attempts to add a location - throwing an exception if it fails because the location isn't found
+  void attemptToAddLocation(final String userEmail, final String location) {
+    _repository.fetchWeatherDataForLocation(userEmail, location).listen((forecast) {
+      List<LocalForecast> forecasts = _forecastsSubject.value ?? List();
+      forecasts?.add(forecast);
+      _loadingSubject.add(false);
+      _forecastsSubject.add(forecasts);
+    }, onError: (e) {
+      print('WeatherBloc - $e');
+      _loadingSubject.add(false);
+      _errorSubject.add("No location found. Please try again");
+    });
+  }
+
+  ///Fires if the user attempts to add a location that they have already added
+  void handlelDuplicateLocationScenario(final String location) {
+    _loadingSubject.add(false);
+    _errorSubject.add("You have already added $location. Please add a unique location.");
+  }
+
+  ///Fires if the user attemps to add a location after they've already added 5
+  void handleTooManyLocationsScenario() {
+    _loadingSubject.add(false);
+    _errorSubject.add("You already have 5 locations. Please remove one before trying to add another");
   }
 }

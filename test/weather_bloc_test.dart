@@ -272,6 +272,52 @@ void main() {
 
       _bloc.fetchForecastForLocation(MockData.fetchUserEmail(), query);
     });
+
+    test('loading single forecast too many added failure scenario', () async {
+      final String query = 'foo';
+      final List<LocalForecast> forecasts = MockData.getMockLocalForecastList(5);
+
+      when(_repository.fetchAllWeatherData(MockData.fetchUserEmail())).thenAnswer((_) => Stream.value(forecasts));
+
+      expectLater(_bloc.loadingStream, emitsInOrder([
+        emits(true),
+        emits(false),
+        emits(true),
+        emits(false)
+      ]));
+
+      await _bloc.fetchAllForecastsForUser(MockData.fetchUserEmail());
+      _bloc.fetchForecastForLocation(MockData.fetchUserEmail(), query);
+    });
+
+    test('loading single forecast no text in search failure scenario', () {
+      final String query = Constants.empty;
+
+      expectLater(_bloc.loadingStream, emitsInOrder([
+        emits(true),
+        emits(false)
+      ]));
+
+      _bloc.fetchForecastForLocation(MockData.fetchUserEmail(), query);
+    });
+
+    test('loading single forecast duplicate location failure scenario', () async {
+      final List<LocalForecast> forecasts = MockData.getMockLocalForecastList(4);
+      final String locationToAdd = forecasts[1].locationName;
+
+      when(_repository.fetchAllWeatherData(MockData.fetchUserEmail())).thenAnswer((_) => Stream.value(forecasts));
+
+      expectLater(_bloc.loadingStream, emitsInOrder([
+        emits(true),
+        emits(false),
+        emits(true),
+        emits(false)
+      ]));
+
+      await _bloc.fetchAllForecastsForUser(MockData.fetchUserEmail());
+      _bloc.fetchForecastForLocation(MockData.fetchUserEmail(), locationToAdd);
+    });
+
   });
 
   group('icon formatting', () {
