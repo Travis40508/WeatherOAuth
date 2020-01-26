@@ -1,16 +1,9 @@
 # weather_oauth
 
-A new Flutter project.
+- A Flutter project that allows the user to use Firebase to access Google's OAth services to authenticate into the application.
+- Afterwards the user may access the OpenWeather API to add various locations they would like to keep a forecast record of.
+- The app supports more than one user - allowing for custom locations for forecasts per-user.
 
-## Getting Started
+## Requirements
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- To use the application you will need internet access and to have a valid Google account.
