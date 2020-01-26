@@ -93,4 +93,8 @@ class WeatherBloc extends Bloc {
   String fetchWeatherIconUrl(String icon) {
     return icon != null && icon.isNotEmpty ? '${Constants.iconPrefix}$icon${Constants.iconSuffix}' : Constants.noImageAvailableUrl;
   }
+
+  String kelvinToFahrenheit(final dynamic kelvin) {
+    return '${((kelvin - 273) * (9/5) + 32).toInt()}${Constants.degreeSymbol}';
+  }
 }

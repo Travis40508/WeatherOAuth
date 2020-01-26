@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:weather_oauth/blocs/weather_bloc.dart';
@@ -87,12 +88,64 @@ class _WeatherScreenState extends State<WeatherScreen> {
                           itemCount: snapshot.data.length,
                           itemBuilder: (context, index) {
                             LocalForecast forecast = snapshot?.data[index];
-                            return Card(
-                              elevation: Constants.defaultElevation,
-                              child: ListTile(
-                                leading: CachedNetworkImage(
-                                  imageUrl: _bloc.fetchWeatherIconUrl(forecast.icon),
-                                  color: forecast?.icon != null ? Theme.of(context).secondaryHeaderColor : null,
+                            return FlipCard(
+                              front: Card(
+                                color: Theme.of(context).appBarTheme.color,
+                                elevation: Constants.defaultElevation,
+                                child: ListTile(
+                                  leading: CachedNetworkImage(
+                                    imageUrl: _bloc.fetchWeatherIconUrl(forecast.icon),
+                                    color: forecast?.icon != null ? Theme.of(context).secondaryHeaderColor : null,
+                                  ),
+                                  title: Text(
+                                    '${forecast.locationName}, ${forecast.country}'
+                                  ),
+                                  subtitle: Text(
+                                    forecast.description
+                                  ),
+                                  trailing: CircleAvatar(
+                                    backgroundColor: Theme.of(context).primaryColor,
+                                    child: Text(
+                                      _bloc.kelvinToFahrenheit(forecast.currentTemp),
+                                      style: Theme.of(context).textTheme.subhead,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              back: Card(
+                                color: Theme.of(context).appBarTheme.color,
+                                elevation: Constants.defaultElevation,
+                                child: Container(
+                                  height: Constants.defaultLoadingTileHeight,
+                                  width: SizeConfig.getPercentageOfScreenWidth(Constants.defaultLoadingTileWidthPercentage, context),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Container(
+                                          child: Text(
+                                            _bloc.kelvinToFahrenheit(forecast.maxTemp),
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context).textTheme.title,
+                                          ),
+                                          color: Colors.red,
+                                          height: double.infinity,
+                                          alignment: Alignment.center,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                          child: Text(
+                                            _bloc.kelvinToFahrenheit(forecast.minTemp),
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context).textTheme.title,
+                                          ),
+                                          color: Colors.lightBlue,
+                                          height: double.infinity,
+                                          alignment: Alignment.center,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             );
