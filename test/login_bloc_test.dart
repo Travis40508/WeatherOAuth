@@ -41,4 +41,31 @@ void main() {
 
   });
 
+  group('loading', () {
+
+    test('successful login scenario', () {
+      final GoogleUser user = GoogleUser('foo', 'fooEmail');
+      when(_repository.authenticateUser(false)).thenAnswer((_) => Stream.value(user));
+
+      expectLater(_bloc.loadingStream, emitsInOrder([
+        emits(true),
+        emits(false)
+      ]));
+
+      _bloc.authenticateUser();
+    });
+
+    test('login failure scenario', () {
+      final error = Error();
+      when(_repository.authenticateUser(false)).thenAnswer((_) => Stream.error(error));
+
+      expectLater(_bloc.loadingStream, emitsInOrder([
+        emits(true),
+        emits(false)
+      ]));
+
+      _bloc.authenticateUser();
+    });
+  });
+
 }
