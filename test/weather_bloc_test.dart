@@ -217,4 +217,60 @@ void main() {
 
     });
   });
+
+  group('loading', () {
+    test('loading all forecasts success scenario', () {
+      final List<LocalForecast> forecasts = MockData.getMockLocalForecastList(4);
+
+      when(_repository.fetchAllWeatherData(MockData.fetchUserEmail())).thenAnswer((_) => Stream.value(forecasts));
+
+      expectLater(_bloc.loadingStream, emitsInOrder([
+        emits(true),
+        emits(false)
+      ]));
+
+      _bloc.fetchAllForecastsForUser(MockData.fetchUserEmail());
+    });
+
+    test('loading all forecasts failure scenario', () {
+      final error = Error();
+
+      when(_repository.fetchAllWeatherData(MockData.fetchUserEmail())).thenAnswer((_) => Stream.error(error));
+
+      expectLater(_bloc.loadingStream, emitsInOrder([
+        emits(true),
+        emits(false)
+      ]));
+
+      _bloc.fetchAllForecastsForUser(MockData.fetchUserEmail());
+    });
+
+    test('loading single forecast success scenario', () {
+      final String query = 'foo';
+      final LocalForecast forecast = MockData.getMockLocalForecast();
+
+      when(_repository.fetchWeatherDataForLocation(MockData.fetchUserEmail(), query)).thenAnswer((_) => Stream.value(forecast));
+
+      expectLater(_bloc.loadingStream, emitsInOrder([
+        emits(true),
+        emits(false)
+      ]));
+
+      _bloc.fetchForecastForLocation(MockData.fetchUserEmail(), query);
+    });
+
+    test('loading single forecast failure scenario', () {
+      final String query = 'foo';
+      final error = Error();
+
+      when(_repository.fetchWeatherDataForLocation(MockData.fetchUserEmail(), 'foo')).thenAnswer((_) => Stream.error(error));
+
+      expectLater(_bloc.loadingStream, emitsInOrder([
+        emits(true),
+        emits(false)
+      ]));
+
+      _bloc.fetchForecastForLocation(MockData.fetchUserEmail(), query);
+    });
+  });
 }
