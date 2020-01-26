@@ -47,7 +47,7 @@ class WeatherBloc extends Bloc {
   bool locationAlreadyExists(final String locationName) {
     bool alreadyExists = false;
     if (_forecastsSubject.value != null) {
-      int indexOfIdenticalItem = _forecastsSubject.value.indexWhere((forecast) => forecast.locationName == locationName);
+      int indexOfIdenticalItem = _forecastsSubject.value.indexWhere((forecast) => forecast.locationName.toLowerCase() == locationName.toLowerCase());
       alreadyExists = indexOfIdenticalItem >= 0;
     }
 

@@ -41,6 +41,8 @@ class Application extends StatelessWidget {
       },
       theme: ThemeData(
           backgroundColor: primaryColor,
+          primaryColor: primaryColor,
+          secondaryHeaderColor: secondaryColor,
           iconTheme: IconThemeData(color: secondaryColor),
           appBarTheme: AppBarTheme(
             color: appBarColor,
@@ -63,7 +65,13 @@ class Application extends StatelessWidget {
               subhead: TextStyle(
                   color: secondaryColor,
                   fontSize: Constants.smallText,
-                  fontWeight: FontWeight.bold))),
+                  fontWeight: FontWeight.bold),
+              caption: TextStyle(
+                color: secondaryColor,
+                fontSize: 8.0,
+              ),
+          ),
+      ),
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:weather_oauth/models/local_forecast.dart';
 import 'package:weather_oauth/routing/weather_route.dart';
 import 'package:weather_oauth/utils/constants.dart';
 import 'package:weather_oauth/utils/size_config.dart';
+import 'package:weather_oauth/widgets/search_tile.dart';
 
 class WeatherScreen extends StatefulWidget {
   @override
@@ -15,7 +16,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
   WeatherRoute _route;
   WeatherBloc _bloc;
-  TextEditingController _controller = TextEditingController();
 
   @override
   void didChangeDependencies() {
@@ -24,9 +24,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
     if (_bloc == null) {
       _bloc = BlocProvider.of<WeatherBloc>(context);
       _bloc.fetchAllForecastsForUser(_route.googleUser.email);
+
+      observeNavigationEvents();
     }
 
-    observeNavigationEvents();
     super.didChangeDependencies();
   }
 
@@ -39,6 +40,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         backgroundColor: Theme.of(context).appBarTheme.color,
@@ -55,11 +57,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 ),
               ),
             ),
-            Expanded(
-              child: Text(
-                  'Forecasts for ${_route.googleUser.displayName}',
-                style: Theme.of(context).textTheme.subhead,
-              ),
+            Text(
+                'Forecasts for ${_route.googleUser.displayName}',
+              style: Theme.of(context).textTheme.subhead,
             )
           ],
         )
@@ -68,20 +68,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextField(
-              controller: _controller,
-            ),
-            RaisedButton(
-              child: Text(
-                'Search'
-              ),
-              onPressed: () => _bloc.fetchForecastForLocation(_route.googleUser.email, _controller.text),
-            ),
-            RaisedButton(
-              child: Text(
-                'Save'
-              ),
-              onPressed: () => _bloc.saveLocation(_controller.text),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SearchTile()
             ),
             Expanded(
               child: StreamBuilder(
@@ -118,7 +107,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
           errorMessage
         ),
       );
-      showDialog(context: context, builder: (context) => errorDialog);
+      showDialog(context: context, builder: (_) => errorDialog);
     }, onError: (e) => print(e));
   }
 }

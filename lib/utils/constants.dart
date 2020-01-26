@@ -7,6 +7,8 @@ class Constants {
   //UI strings
   static const welcomeBack = 'Welcome Back';
   static const loginWithGoogle = 'Login with Google';
+  static const searchLabel = "Search by City";
+  static const searchHint = "Ex. Columbus";
 
 
   //tags
@@ -18,4 +20,5 @@ class Constants {
   static const largeText = 48.0;
   static const mediumText = 36.0;
   static const smallText = 18.0;
+  static const defaultBorderWidth = 2.0;
 }
