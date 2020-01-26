@@ -89,7 +89,17 @@ class _WeatherScreenState extends State<WeatherScreen> {
                           itemCount: snapshot.data.length,
                           itemBuilder: (context, index) {
                             LocalForecast forecast = snapshot?.data[index];
-                            return WeatherTile(forecast);
+                            return WeatherTile(forecast, () {
+                              _bloc.removeLocation(_route.googleUser.email, forecast.locationName);
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                backgroundColor: Theme.of(context).appBarTheme.color,
+                                  content: Text(
+                                      '${forecast.locationName} Removed',
+                                    style: Theme.of(context).textTheme.subhead
+                                  ),
+                              ),
+                              );
+                            });
                           },
                         );
                       }

@@ -11,8 +11,9 @@ import 'package:weather_oauth/widgets/temperature_tile.dart';
 class WeatherTile extends StatefulWidget {
 
   final LocalForecast forecast;
+  final VoidCallback onLongPress;
 
-  WeatherTile(this.forecast);
+  WeatherTile(this.forecast, this.onLongPress);
 
   @override
   _WeatherTileState createState() => _WeatherTileState();
@@ -33,41 +34,44 @@ class _WeatherTileState extends State<WeatherTile> {
 
   @override
   Widget build(BuildContext context) {
-    return FlipCard(
-      front: Card(
-        color: Theme.of(context).appBarTheme.color,
-        elevation: Constants.defaultElevation,
-        child: ListTile(
-          leading: CachedNetworkImage(
-            imageUrl: _bloc.fetchWeatherIconUrl(widget.forecast.icon),
-            color: widget.forecast?.icon != null ? Theme.of(context).secondaryHeaderColor : null,
-          ),
-          title: Text(
-              '${widget.forecast.locationName}, ${widget.forecast.country}'
-          ),
-          subtitle: Text(
-              widget.forecast.description
-          ),
-          trailing: CircleAvatar(
-            backgroundColor: Theme.of(context).primaryColor,
-            child: Text(
-              _bloc.kelvinToFahrenheit(widget.forecast.currentTemp),
-              style: Theme.of(context).textTheme.subhead,
+    return InkWell(
+      onLongPress: this.widget.onLongPress,
+      child: FlipCard(
+        front: Card(
+          color: Theme.of(context).appBarTheme.color,
+          elevation: Constants.defaultElevation,
+          child: ListTile(
+            leading: CachedNetworkImage(
+              imageUrl: _bloc.fetchWeatherIconUrl(widget.forecast.icon),
+              color: widget.forecast?.icon != null ? Theme.of(context).secondaryHeaderColor : null,
+            ),
+            title: Text(
+                '${widget.forecast.locationName}, ${widget.forecast.country}'
+            ),
+            subtitle: Text(
+                widget.forecast.description
+            ),
+            trailing: CircleAvatar(
+              backgroundColor: Theme.of(context).primaryColor,
+              child: Text(
+                _bloc.kelvinToFahrenheit(widget.forecast.currentTemp),
+                style: Theme.of(context).textTheme.subhead,
+              ),
             ),
           ),
         ),
-      ),
-      back: Card(
-        color: Theme.of(context).appBarTheme.color,
-        elevation: Constants.defaultElevation,
-        child: Container(
-          height: Constants.defaultLoadingTileHeight,
-          width: SizeConfig.getPercentageOfScreenWidth(Constants.defaultLoadingTileWidthPercentage, context),
-          child: Row(
-            children: <Widget>[
-              TemperatureTile(_bloc.kelvinToFahrenheit(widget.forecast.maxTemp), Colors.red),
-              TemperatureTile(_bloc.kelvinToFahrenheit(widget.forecast.minTemp), Colors.lightBlue),
-            ],
+        back: Card(
+          color: Theme.of(context).appBarTheme.color,
+          elevation: Constants.defaultElevation,
+          child: Container(
+            height: Constants.defaultLoadingTileHeight,
+            width: SizeConfig.getPercentageOfScreenWidth(Constants.defaultLoadingTileWidthPercentage, context),
+            child: Row(
+              children: <Widget>[
+                TemperatureTile(_bloc.kelvinToFahrenheit(widget.forecast.maxTemp), Colors.red),
+                TemperatureTile(_bloc.kelvinToFahrenheit(widget.forecast.minTemp), Colors.lightBlue),
+              ],
+            ),
           ),
         ),
       ),
