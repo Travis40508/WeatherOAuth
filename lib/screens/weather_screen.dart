@@ -73,7 +73,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(Constants.defaultPadding),
               child: SearchTile()
             ),
             Expanded(

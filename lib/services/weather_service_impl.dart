@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:weather_oauth/models/location_current_forecast_res.dart';
 import 'package:weather_oauth/services/weather_service.dart';
 import 'package:http/http.dart' show Client;
+import 'package:weather_oauth/utils/constants.dart';
 
 class WeatherServiceImpl implements WeatherService {
 
@@ -20,7 +21,7 @@ class WeatherServiceImpl implements WeatherService {
   Future<LocationCurrentForecastRes> fetchWeatherForLocation(final String location) async {
     final url = '$_baseUrl?$_queryKey$location&$_appIdKey$_appId';
     print('fetching response for $url');
-    final response = await client.get(url);
+    final response = await client.get(url).timeout(Duration(seconds: Constants.timeoutDurationInSeconds));
     final json = jsonDecode(response.body);
 
     print('response for $url:');

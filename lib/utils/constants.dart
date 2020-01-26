@@ -22,6 +22,7 @@ class Constants {
   static const sunHeroTag = "sun_her_tag";
 
   //defaults
+  static const timeoutDurationInSeconds = 5;
   static const defaultPadding = 8.0;
   static const defaultElevation = 8.0;
   static const largeText = 48.0;
