@@ -46,8 +46,8 @@ class WeatherBloc extends Bloc {
 
   bool locationAlreadyExists(final String locationName) {
     bool alreadyExists = false;
-    if (_forecastsSubject.value != null) {
-      int indexOfIdenticalItem = _forecastsSubject.value.indexWhere((forecast) => forecast.locationName.toLowerCase() == locationName.toLowerCase());
+    if (_forecastsSubject?.value != null) {
+      int indexOfIdenticalItem = _forecastsSubject?.value?.indexWhere((forecast) => forecast?.locationName?.toLowerCase() == locationName?.toLowerCase());
       alreadyExists = indexOfIdenticalItem >= 0;
     }
 
@@ -71,18 +71,14 @@ class WeatherBloc extends Bloc {
   }
 
   void removeLocation(final String userEmail, final String location) async {
-    bool successfullyRemoved = await _repository.removeLocation(userEmail, location);
+    bool successfullyRemoved = await _repository?.removeLocation(userEmail, location);
       if (successfullyRemoved) {
         List<LocalForecast> forecasts = _forecastsSubject?.value;
-        forecasts?.removeWhere((forecast) => forecast.locationName == location);
+        forecasts?.removeWhere((forecast) => forecast?.locationName == location);
 
         ///clearing the stream
-        _forecastsSubject.add(forecasts.isNotEmpty ? forecasts : null);
+        _forecastsSubject?.add(forecasts.isNotEmpty ? forecasts : null);
       }
-  }
-
-  void saveLocation(final String location) {
-
   }
 
   String fetchWeatherIconUrl(String icon) {
@@ -102,7 +98,7 @@ class WeatherBloc extends Bloc {
   ///Attempts to add a location - throwing an exception if it fails because the location isn't found
   void attemptToAddLocation(final String userEmail, final String location) {
     _repository.fetchWeatherDataForLocation(userEmail, location).listen((forecast) {
-      List<LocalForecast> forecasts = _forecastsSubject.value ?? List();
+      List<LocalForecast> forecasts = _forecastsSubject?.value ?? List();
       forecasts?.add(forecast);
       _loadingSubject.add(false);
       _forecastsSubject.add(forecasts);

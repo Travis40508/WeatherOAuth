@@ -41,11 +41,11 @@ class _SplashTileState extends State<SplashTile> {
           Padding(
             padding: const EdgeInsets.all(Constants.defaultPadding),
             child: StreamBuilder(
-              stream: _bloc.userStream,
+              stream: _bloc?.userStream,
               builder: (context, AsyncSnapshot<GoogleUser> snapshot) {
                 return snapshot.hasData ? Text(
-                  _bloc?.fetchGreeting(snapshot.data.displayName),
-                  style: Theme.of(context).textTheme?.subhead,
+                  _bloc?.fetchGreeting(snapshot?.data?.displayName),
+                  style: Theme.of(context)?.textTheme?.subhead,
                   textAlign: TextAlign.center,
                 ) : Container();
               },

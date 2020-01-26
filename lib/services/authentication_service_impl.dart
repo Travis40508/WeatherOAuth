@@ -22,7 +22,7 @@ class AuthenticationServiceImpl implements AuthenticationService {
 
     final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount?.authentication;
 
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
+    final AuthCredential credential = GoogleAuthProvider?.getCredential(
       accessToken: googleSignInAuthentication?.accessToken,
       idToken: googleSignInAuthentication?.idToken,
     );

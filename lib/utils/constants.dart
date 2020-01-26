@@ -19,6 +19,8 @@ class Constants {
   static const deletedText = 'Removed';
   static const deletingText = 'Deleting';
   static const deletionConfirmation = 'Are you sure you wish to delete this location?';
+  static const signingOffTitle = 'Signing Off?';
+  static const signingOffMessage = 'Are you sure you wish to sign out?';
 
 
   //tags

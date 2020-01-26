@@ -21,8 +21,8 @@ class WeatherServiceImpl implements WeatherService {
   Future<LocationCurrentForecastRes> fetchWeatherForLocation(final String location) async {
     final url = '$_baseUrl?$_queryKey$location&$_appIdKey$_appId';
     print('fetching response for $url');
-    final response = await client.get(url).timeout(Duration(seconds: Constants.timeoutDurationInSeconds));
-    final json = jsonDecode(response.body);
+    final response = await client?.get(url)?.timeout(Duration(seconds: Constants.timeoutDurationInSeconds));
+    final json = jsonDecode(response?.body);
 
     print('response for $url:');
     print(json);

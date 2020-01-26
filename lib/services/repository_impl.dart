@@ -15,14 +15,14 @@ class RepositoryImpl implements Repository {
   @override
   Stream<GoogleUser> authenticateUser(final bool signInSilently) {
     return Stream.fromFuture(
-            _authService.fetchGoogleAuthentication(signInSilently))
+            _authService?.fetchGoogleAuthentication(signInSilently))
         .map((authentication) => authentication?.user)
         .map((user) => GoogleUser(user?.displayName, user?.email));
   }
 
   @override
   Stream<LocalForecast> fetchWeatherDataForLocation(final String userEmail, final String location, {final bool saveLocation = true}) {
-    return Stream.fromFuture(_weatherService.fetchWeatherForLocation(location))
+    return Stream.fromFuture(_weatherService?.fetchWeatherForLocation(location))
         .map((res) => LocalForecast(
             res.weatherList.first.description,
             res.weatherList.first.icon,
@@ -37,17 +37,17 @@ class RepositoryImpl implements Repository {
   @override
   Future<bool> removeLocation(final String userEmail, final String location) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    List<String> savedLocations = sharedPreferences.getStringList(userEmail) ?? List();
-    savedLocations.removeWhere((savedLocation) => location.toUpperCase().contains(savedLocation.toUpperCase()));
+    List<String> savedLocations = sharedPreferences?.getStringList(userEmail) ?? List();
+    savedLocations?.removeWhere((savedLocation) => location?.toUpperCase()?.contains(savedLocation?.toUpperCase()));
 
-    sharedPreferences.remove(userEmail);
-    return sharedPreferences.setStringList(userEmail, savedLocations);
+    sharedPreferences?.remove(userEmail);
+    return sharedPreferences?.setStringList(userEmail, savedLocations);
   }
 
   @override
   Stream<List<LocalForecast>> fetchAllWeatherData(final String userEmail) {
     return Stream.fromFuture(SharedPreferences.getInstance())
-        .map((prefs) => prefs.getStringList(userEmail))
+        .map((prefs) => prefs?.getStringList(userEmail))
         .flatMapIterable((list) => Stream.value(list))
         .flatMap((savedLocation) => fetchWeatherDataForLocation(userEmail, savedLocation, saveLocation: false))
         .toList()
@@ -57,10 +57,10 @@ class RepositoryImpl implements Repository {
   @override
   void saveNewLocation(final String userEmail, final String location) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    List<String> savedLocations = sharedPreferences.getStringList(userEmail) ?? List();
-    savedLocations.add(location.toUpperCase());
+    List<String> savedLocations = sharedPreferences?.getStringList(userEmail) ?? List();
+    savedLocations?.add(location.toUpperCase());
 
-    sharedPreferences.setStringList(userEmail, savedLocations);
+    sharedPreferences?.setStringList(userEmail, savedLocations);
   }
 
   @override
