@@ -44,7 +44,6 @@ class _SplashScreenState extends State<SplashScreen> {
     _bloc.userStream
         .debounce((_) => TimerStream(true, Duration(seconds: Constants.splashWaitDurationInSeconds)))
         .listen((displayName) {
-//          Navigator.of(context).pushReplacementNamed(LoginRoute.routeName, arguments: LoginRoute());
       Navigator.of(context).pushReplacementNamed(WeatherRoute.routeName, arguments: WeatherRoute(displayName));
     }, onError: (e) {
       ///it's good practice to use an empty route object to enforce consistent behavior for navigation

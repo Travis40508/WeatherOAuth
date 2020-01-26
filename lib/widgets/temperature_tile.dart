@@ -25,4 +25,3 @@ class TemperatureTile extends StatelessWidget {
 }
 
 
-//_bloc.kelvinToFahrenheit(widget.forecast.minTemp),

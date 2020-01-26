@@ -1,3 +1,4 @@
+///Provides application constants.
 
 class Constants {
   static const appTitle = 'Weather OAuth';
@@ -14,6 +15,7 @@ class Constants {
   static const failureDialogTitle = 'Bummer';
   static const forecastForPrefix = 'Forecasts for';
   static const degreeSymbol = '\u00b0';
+  static const deletedText = 'Removed';
 
 
   //tags

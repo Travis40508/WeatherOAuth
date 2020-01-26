@@ -1,5 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:weather_oauth/blocs/weather_bloc.dart';
@@ -90,15 +88,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                           itemBuilder: (context, index) {
                             LocalForecast forecast = snapshot?.data[index];
                             return WeatherTile(forecast, () {
-                              _bloc.removeLocation(_route.googleUser.email, forecast.locationName);
-                              Scaffold.of(context).showSnackBar(SnackBar(
-                                backgroundColor: Theme.of(context).appBarTheme.color,
-                                  content: Text(
-                                      '${forecast.locationName} Removed',
-                                    style: Theme.of(context).textTheme.subhead
-                                  ),
-                              ),
-                              );
+                              handleOnLongClick(forecast);
                             });
                           },
                         );
@@ -114,7 +104,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
                       if (snapshot.data) {
                         return CustomLoadingTile();
                       }
-
                       return Container();
                     },
                   ),
@@ -131,5 +120,17 @@ class _WeatherScreenState extends State<WeatherScreen> {
     _bloc.errorStream.listen((errorMessage) {
       showDialog(context: context, builder: (_) => CustomDialog(Constants.failureDialogTitle, errorMessage, () => Navigator.pop(context)));
     }, onError: (e) => print(e));
+  }
+
+  void handleOnLongClick(final LocalForecast forecast) {
+    _bloc.removeLocation(_route.googleUser.email, forecast.locationName);
+    Scaffold.of(context).showSnackBar(SnackBar(
+      backgroundColor: Theme.of(context).appBarTheme.color,
+      content: Text(
+          '${forecast.locationName} ${Constants.deletedText}',
+          style: Theme.of(context).textTheme.subhead
+      ),
+    ),
+    );
   }
 }

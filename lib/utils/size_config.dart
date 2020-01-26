@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 
+///A convenient wrapper to allow consistent sizing on multiple screen sizes
 class SizeConfig {
 
   ///this could be replaced with getPercentageOfScreenWidth
