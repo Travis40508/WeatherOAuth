@@ -85,6 +85,27 @@ void main() {
       _bloc.removeLocation(MockData.fetchUserEmail(), locationToDelete);
     });
 
+    test('deleting last place successfully', () async {
+      final List<LocalForecast> forecasts = MockData.getMockLocalForecastList(1);
+      final String locationToDelete = forecasts[0]?.locationName;
+
+      when(_repository.fetchAllWeatherData(MockData.fetchUserEmail())).thenAnswer((_) => Stream.value(forecasts));
+      when(_repository.removeLocation(MockData.fetchUserEmail(), locationToDelete)).thenAnswer((_) => Future.value(true));
+
+      List<LocalForecast> newForecasts = List();
+      newForecasts.addAll(forecasts);
+
+      newForecasts.removeWhere((forecast) => forecast.locationName == locationToDelete);
+
+      expectLater(_bloc.forecastsStream, emitsInOrder([
+        emits(forecasts),
+        emits(null)
+      ]));
+
+      await _bloc.fetchAllForecastsForUser(MockData.fetchUserEmail());
+      _bloc.removeLocation(MockData.fetchUserEmail(), locationToDelete);
+    });
+
     test('checking all locations and succeeds if there are not any', () {
 
       when(_repository.fetchAllWeatherData(MockData.fetchUserEmail())).thenAnswer((_) => Stream.value(null));

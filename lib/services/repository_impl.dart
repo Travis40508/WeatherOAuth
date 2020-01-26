@@ -38,8 +38,9 @@ class RepositoryImpl implements Repository {
   Future<bool> removeLocation(final String userEmail, final String location) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     List<String> savedLocations = sharedPreferences.getStringList(userEmail) ?? List();
-    savedLocations.remove(location);
+    savedLocations.remove(location.toUpperCase());
 
+    sharedPreferences.remove(userEmail);
     return sharedPreferences.setStringList(userEmail, savedLocations);
   }
 
@@ -57,7 +58,7 @@ class RepositoryImpl implements Repository {
   void saveNewLocation(final String userEmail, final String location) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     List<String> savedLocations = sharedPreferences.getStringList(userEmail) ?? List();
-    savedLocations.add(location);
+    savedLocations.add(location.toUpperCase());
 
     sharedPreferences.setStringList(userEmail, savedLocations);
   }

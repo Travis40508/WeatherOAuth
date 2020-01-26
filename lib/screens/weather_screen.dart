@@ -91,7 +91,22 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     );
                   }
 
-                  return Container();
+                  return Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(Constants.defaultPadding),
+                            child: Icon(Icons.wb_sunny),
+                          ),
+                          Text(
+                            'Add a Forecast to get Started!',
+                            style: Theme.of(context).textTheme.subhead,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      )
+                  );
                 },
               ),
             )

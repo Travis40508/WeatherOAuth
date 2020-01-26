@@ -72,7 +72,9 @@ class WeatherBloc extends Bloc {
       if (successfullyRemoved) {
         List<LocalForecast> forecasts = _forecastsSubject?.value;
         forecasts?.removeWhere((forecast) => forecast.locationName == location);
-        _forecastsSubject.add(forecasts);
+
+        ///clearing the stream
+        _forecastsSubject.add(forecasts.isNotEmpty ? forecasts : null);
       }
   }
 
