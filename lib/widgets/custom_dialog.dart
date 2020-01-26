@@ -37,6 +37,7 @@ class CustomDialog extends StatelessWidget {
           onPressed: positiveCallback,
         ),
         negativeCallback != null ? FlatButton(
+          onPressed: negativeCallback,
           color: Theme.of(context).appBarTheme.color,
           child: Text(
             Constants.cancel,

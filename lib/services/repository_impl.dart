@@ -38,7 +38,7 @@ class RepositoryImpl implements Repository {
   Future<bool> removeLocation(final String userEmail, final String location) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     List<String> savedLocations = sharedPreferences.getStringList(userEmail) ?? List();
-    savedLocations.remove(location.toUpperCase());
+    savedLocations.removeWhere((savedLocation) => location.toUpperCase().contains(savedLocation.toUpperCase()));
 
     sharedPreferences.remove(userEmail);
     return sharedPreferences.setStringList(userEmail, savedLocations);
