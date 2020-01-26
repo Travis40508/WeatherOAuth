@@ -18,7 +18,7 @@ class Application extends StatelessWidget {
 
   final primaryColor = Colors.blueAccent;
   final secondaryColor = Colors.orange[300];
-  final appBarColor = Colors.blue;
+  final appBarColor = Colors.blue[800];
 
   @override
   Widget build(BuildContext context) {

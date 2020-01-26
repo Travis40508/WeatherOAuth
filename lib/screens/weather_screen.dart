@@ -3,6 +3,8 @@ import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:weather_oauth/blocs/weather_bloc.dart';
 import 'package:weather_oauth/models/local_forecast.dart';
 import 'package:weather_oauth/routing/weather_route.dart';
+import 'package:weather_oauth/utils/constants.dart';
+import 'package:weather_oauth/utils/size_config.dart';
 
 class WeatherScreen extends StatefulWidget {
   @override
@@ -37,14 +39,30 @@ class _WeatherScreenState extends State<WeatherScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
-        title: Text(
-            _route.googleUser.displayName,
-          style: TextStyle(
-            color: Colors.white
-          ),
-        ),
+        backgroundColor: Theme.of(context).appBarTheme.color,
+        title: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(Constants.defaultPadding),
+              child: Hero(
+                tag: Constants.sunHeroTag,
+                child: Icon(
+                    Icons.wb_sunny,
+                    size: SizeConfig.getPercentageOfScreenHeight(6, context),
+                    color: Theme.of(context).iconTheme.color,
+                ),
+              ),
+            ),
+            Expanded(
+              child: Text(
+                  'Forecasts for ${_route.googleUser.displayName}',
+                style: Theme.of(context).textTheme.subhead,
+              ),
+            )
+          ],
+        )
       ),
       body: Center(
         child: Column(
