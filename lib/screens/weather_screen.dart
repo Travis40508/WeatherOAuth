@@ -5,6 +5,7 @@ import 'package:weather_oauth/models/local_forecast.dart';
 import 'package:weather_oauth/routing/weather_route.dart';
 import 'package:weather_oauth/utils/constants.dart';
 import 'package:weather_oauth/utils/size_config.dart';
+import 'package:weather_oauth/widgets/custom_dialog.dart';
 import 'package:weather_oauth/widgets/search_tile.dart';
 
 class WeatherScreen extends StatefulWidget {
@@ -102,12 +103,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
   void observeNavigationEvents() {
     _bloc.errorStream.listen((errorMessage) {
-      Dialog errorDialog = Dialog(
-        child: Text(
-          errorMessage
-        ),
-      );
-      showDialog(context: context, builder: (_) => errorDialog);
+      showDialog(context: context, builder: (_) => CustomDialog('Bummer', errorMessage, () => Navigator.pop(context)));
     }, onError: (e) => print(e));
   }
 }

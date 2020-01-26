@@ -9,6 +9,7 @@ class Constants {
   static const loginWithGoogle = 'Login with Google';
   static const searchLabel = "Search by City";
   static const searchHint = "Ex. Columbus";
+  static const OK = "OK";
 
 
   //tags
