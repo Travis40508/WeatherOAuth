@@ -24,12 +24,12 @@ class WeatherBloc extends Bloc {
     _errorSubject.close();
   }
 
-  ///full unit-test coverage for this heavy function written ahead of implementation
-  void fetchForecastForLocation(final String location) {
+  ///full unit-test coverage for this function can be found in weather_bloc_test.dart file
+  void fetchForecastForLocation(final String userEmail, final String location) {
     if (location == null || location.isEmpty) {
       _errorSubject.add("Please add search criteria.");
     } else if (_forecastsSubject.value == null || (_forecastsSubject.value.length < 5 && !locationAlreadyExists(location))) {
-      _repository.fetchWeatherDataForLocation(location).listen((forecast) {
+      _repository.fetchWeatherDataForLocation(userEmail, location).listen((forecast) {
         List<LocalForecast> forecasts = _forecastsSubject.value ?? List();
           forecasts?.add(forecast);
           _forecastsSubject.add(forecasts);
@@ -67,17 +67,13 @@ class WeatherBloc extends Bloc {
     });
   }
 
-  void removeLocation(final String userEmail, final String location) {
-    _repository.removeLocation(userEmail, location)
-    .listen((success) {
-      if (success) {
+  void removeLocation(final String userEmail, final String location) async {
+    bool successfullyRemoved = await _repository.removeLocation(userEmail, location);
+      if (successfullyRemoved) {
         List<LocalForecast> forecasts = _forecastsSubject?.value;
         forecasts?.removeWhere((forecast) => forecast.locationName == location);
         _forecastsSubject.add(forecasts);
       }
-    }, onError: (e) {
-      print('WeatherBloc.removeLocation() - $e');
-    });
   }
 
   void saveLocation(final String location) {

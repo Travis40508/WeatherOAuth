@@ -17,8 +17,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
   @override
   void didChangeDependencies() {
-    _bloc = BlocProvider.of<WeatherBloc>(context);
     _route = ModalRoute.of(context).settings.arguments;
+
+    if (_bloc == null) {
+      _bloc = BlocProvider.of<WeatherBloc>(context);
+      _bloc.fetchAllForecastsForUser(_route.googleUser.email);
+    }
 
     observeNavigationEvents();
     super.didChangeDependencies();
@@ -53,7 +57,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
               child: Text(
                 'Search'
               ),
-              onPressed: () => _bloc.fetchForecastForLocation(_controller.text),
+              onPressed: () => _bloc.fetchForecastForLocation(_route.googleUser.email, _controller.text),
             ),
             RaisedButton(
               child: Text(
@@ -69,8 +73,11 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     return ListView.builder(
                       itemCount: snapshot.data.length,
                       itemBuilder: (context, index) {
-                        return Text(
-                          snapshot.data[index].locationName
+                        return RaisedButton(
+                          child: Text(
+                            snapshot.data[index].locationName
+                          ),
+                          onPressed: () => _bloc.removeLocation(_route.googleUser.email, snapshot.data[index].locationName),
                         );
                       },
                     );

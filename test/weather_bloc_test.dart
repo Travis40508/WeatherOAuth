@@ -26,7 +26,7 @@ void main() {
       final LocalForecast foreCastForFoo = MockData.getMockLocalForecast();
 
       when(_repository.fetchAllWeatherData(MockData.fetchUserEmail())).thenAnswer((_) => Stream.value(forecasts));
-      when(_repository.fetchWeatherDataForLocation(location)).thenAnswer((_) => Stream.value(foreCastForFoo));
+      when(_repository.fetchWeatherDataForLocation(MockData.fetchUserEmail(), location)).thenAnswer((_) => Stream.value(foreCastForFoo));
 
       List newForecasts = List();
       newForecasts.addAll(forecasts);
@@ -39,7 +39,7 @@ void main() {
 
       ///warning is invalid - ensures that functions are ran synchronously
       await _bloc.fetchAllForecastsForUser(MockData.fetchUserEmail());
-      _bloc.fetchForecastForLocation(location);
+      _bloc.fetchForecastForLocation(MockData.fetchUserEmail(), location);
     });
 
     test('adding new place successfully when there are no existing forecasts', () async {
@@ -49,7 +49,7 @@ void main() {
 
       when(_repository.fetchAllWeatherData(MockData.fetchUserEmail())).thenAnswer((_) => Stream.value(forecasts));
 
-      when(_repository.fetchWeatherDataForLocation(location)).thenAnswer((_) => Stream.value(foreCastForFoo));
+      when(_repository.fetchWeatherDataForLocation(MockData.fetchUserEmail(), location)).thenAnswer((_) => Stream.value(foreCastForFoo));
 
       List newForecasts = List();
       newForecasts.addAll(forecasts);
@@ -61,7 +61,7 @@ void main() {
       ]));
 
       await _bloc.fetchAllForecastsForUser(MockData.fetchUserEmail());
-      _bloc.fetchForecastForLocation(location);
+      _bloc.fetchForecastForLocation(MockData.fetchUserEmail(), location);
     });
 
     test('deleting place successfully', () async {
@@ -69,7 +69,7 @@ void main() {
       final String locationToDelete = forecasts[2]?.locationName;
 
       when(_repository.fetchAllWeatherData(MockData.fetchUserEmail())).thenAnswer((_) => Stream.value(forecasts));
-      when(_repository.removeLocation(MockData.fetchUserEmail(), locationToDelete)).thenAnswer((_) => Stream.value(true));
+      when(_repository.removeLocation(MockData.fetchUserEmail(), locationToDelete)).thenAnswer((_) => Future.value(true));
 
       List<LocalForecast> newForecasts = List();
       newForecasts.addAll(forecasts);
@@ -111,7 +111,7 @@ void main() {
       ]));
 
       await _bloc.fetchAllForecastsForUser(MockData.fetchUserEmail());
-      _bloc.fetchForecastForLocation(forecastToAdd.locationName);
+      _bloc.fetchForecastForLocation(MockData.fetchUserEmail(), forecastToAdd.locationName);
     });
 
     test('stopping user from adding a duplicate location successfully', () async {
@@ -129,7 +129,7 @@ void main() {
       ]));
 
       await _bloc.fetchAllForecastsForUser(MockData.fetchUserEmail());
-      _bloc.fetchForecastForLocation(forecastToAdd.locationName);
+      _bloc.fetchForecastForLocation(MockData.fetchUserEmail(), forecastToAdd.locationName);
 
     });
 
@@ -149,13 +149,13 @@ void main() {
       final error = Error();
       final String searchQuery = 'foo';
 
-      when(_repository.fetchWeatherDataForLocation(searchQuery)).thenAnswer((_) => Stream.error(error));
+      when(_repository.fetchWeatherDataForLocation(MockData.fetchUserEmail(), searchQuery)).thenAnswer((_) => Stream.error(error));
 
       expectLater(_bloc.errorStream, emitsInOrder([
         emits(anything)
       ]));
 
-      await _bloc.fetchForecastForLocation(searchQuery);
+      await _bloc.fetchForecastForLocation(MockData.fetchUserEmail(), searchQuery);
     });
 
     test('general error scenario for all locations', () async {
@@ -176,13 +176,13 @@ void main() {
       final String searchQuery = 'as8d7as9d87a9duasd';
       final error = Error();
 
-      when(_repository.fetchWeatherDataForLocation(searchQuery)).thenAnswer((_) => Stream.error(error));
+      when(_repository.fetchWeatherDataForLocation(MockData.fetchUserEmail(), searchQuery)).thenAnswer((_) => Stream.error(error));
 
       expectLater(_bloc.errorStream, emitsInOrder([
         emits(anything)
       ]));
 
-      _bloc.fetchForecastForLocation(searchQuery);
+      _bloc.fetchForecastForLocation(MockData.fetchUserEmail(), searchQuery);
     });
 
     test('searching for blank location', () {
@@ -192,7 +192,7 @@ void main() {
         emits(anything)
       ]));
 
-      _bloc.fetchForecastForLocation(searchQuery);
+      _bloc.fetchForecastForLocation(MockData.fetchUserEmail(), searchQuery);
 
     });
   });

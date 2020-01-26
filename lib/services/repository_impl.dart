@@ -1,3 +1,4 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_oauth/models/google_user.dart';
 import 'package:weather_oauth/models/local_forecast.dart';
 import 'package:weather_oauth/services/authentication_service.dart';
@@ -20,7 +21,7 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Stream<LocalForecast> fetchWeatherDataForLocation(final String location) {
+  Stream<LocalForecast> fetchWeatherDataForLocation(final String userEmail, final String location, {final bool saveLocation = true}) {
     return Stream.fromFuture(_weatherService.fetchWeatherForLocation(location))
         .map((res) => LocalForecast(
             res.weatherList.first.description,
@@ -29,24 +30,35 @@ class RepositoryImpl implements Repository {
             res.temperatures.lowTemperature,
             res.temperatures.highTemperature,
             res.weatherSystem.country,
-            res.locationName));
+            res.locationName))
+        .doOnData((forecast) => saveLocation ? saveNewLocation(userEmail, location) : print('location not saved'));
   }
 
   @override
-  Stream<bool> removeLocation(final String userEmail, final String location) {
-    // TODO: implement removeLocation
-    throw UnimplementedError();
+  Future<bool> removeLocation(final String userEmail, final String location) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    List<String> savedLocations = sharedPreferences.getStringList(userEmail) ?? List();
+    savedLocations.remove(location);
+
+    return sharedPreferences.setStringList(userEmail, savedLocations);
   }
 
   @override
   Stream<List<LocalForecast>> fetchAllWeatherData(final String userEmail) {
-    // TODO: implement fetchAllWeatherData
-    throw UnimplementedError();
+    return Stream.fromFuture(SharedPreferences.getInstance())
+        .map((prefs) => prefs.getStringList(userEmail))
+        .flatMapIterable((list) => Stream.value(list))
+        .flatMap((savedLocation) => fetchWeatherDataForLocation(userEmail, savedLocation, saveLocation: false))
+        .toList()
+        .asStream();
   }
 
   @override
-  Stream<bool> saveNewLocation(final String userEmail, final String location) {
-    // TODO: implement saveNewLocation
-    throw UnimplementedError();
+  void saveNewLocation(final String userEmail, final String location) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    List<String> savedLocations = sharedPreferences.getStringList(userEmail) ?? List();
+    savedLocations.add(location);
+
+    sharedPreferences.setStringList(userEmail, savedLocations);
   }
 }
