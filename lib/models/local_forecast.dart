@@ -5,9 +5,9 @@
 class LocalForecast {
   final String _description;
   final String _icon;
-  final double _currentTemp;
-  final double _minTemp;
-  final double _maxTemp;
+  final dynamic _currentTemp;
+  final dynamic _minTemp;
+  final dynamic _maxTemp;
   final String _country;
   final String _locationName;
 
@@ -17,11 +17,11 @@ class LocalForecast {
 
   String get country => _country;
 
-  double get maxTemp => _maxTemp;
+  dynamic get maxTemp => _maxTemp;
 
-  double get minTemp => _minTemp;
+  dynamic get minTemp => _minTemp;
 
-  double get currentTemp => _currentTemp;
+  dynamic get currentTemp => _currentTemp;
 
   String get icon => _icon;
 

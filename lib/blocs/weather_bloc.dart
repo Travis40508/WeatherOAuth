@@ -31,15 +31,11 @@ class WeatherBloc extends Bloc {
     } else if (_forecastsSubject.value == null || (_forecastsSubject.value.length < 5 && !locationAlreadyExists(location))) {
       _repository.fetchWeatherDataForLocation(location).listen((forecast) {
         List<LocalForecast> forecasts = _forecastsSubject.value ?? List();
-        if (forecast != null) {
           forecasts?.add(forecast);
           _forecastsSubject.add(forecasts);
-        } else {
-          _errorSubject.add("No location found. Please try again");
-        }
       }, onError: (e) {
         print('WeatherBloc - $e');
-        _errorSubject.add("An error has occurred. Please try again later.");
+        _errorSubject.add("No location found. Please try again");
       });
     } else if (locationAlreadyExists(location)) {
       _errorSubject.add("You have already added $location. Please add a unique location.");
@@ -82,5 +78,9 @@ class WeatherBloc extends Bloc {
     }, onError: (e) {
       print('WeatherBloc.removeLocation() - $e');
     });
+  }
+
+  void saveLocation(final String location) {
+
   }
 }

@@ -174,8 +174,9 @@ void main() {
   group('search', () {
     test('not finding searched location', () async {
       final String searchQuery = 'as8d7as9d87a9duasd';
+      final error = Error();
 
-      when(_repository.fetchWeatherDataForLocation(searchQuery)).thenAnswer((_) => Stream.value(null));
+      when(_repository.fetchWeatherDataForLocation(searchQuery)).thenAnswer((_) => Stream.error(error));
 
       expectLater(_bloc.errorStream, emitsInOrder([
         emits(anything)

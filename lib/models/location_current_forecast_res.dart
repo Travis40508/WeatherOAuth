@@ -35,20 +35,20 @@ class Weather {
 }
 
 class Temperatures {
-  final double _currentTemperature;
-  final double _highTemperature;
-  final double _lowTemperature;
+  final dynamic _currentTemperature;
+  final dynamic _highTemperature;
+  final dynamic _lowTemperature;
 
   Temperatures.fromJson(Map<String, dynamic> parsedJson)
     : _currentTemperature = parsedJson['temp'],
       _highTemperature = parsedJson['temp_max'],
       _lowTemperature = parsedJson['temp_min'];
 
-  double get lowTemperature => _lowTemperature;
+  dynamic get lowTemperature => _lowTemperature;
 
-  double get highTemperature => _highTemperature;
+  dynamic get highTemperature => _highTemperature;
 
-  double get currentTemperature => _currentTemperature;
+  dynamic get currentTemperature => _currentTemperature;
 
 }
 
