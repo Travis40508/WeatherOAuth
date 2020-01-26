@@ -1,11 +1,8 @@
-
-
-import 'package:flutter/foundation.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_oauth/models/local_forecast.dart';
 import 'package:weather_oauth/services/repository.dart';
+import 'package:weather_oauth/utils/constants.dart';
 
 class WeatherBloc extends Bloc {
 
@@ -91,5 +88,9 @@ class WeatherBloc extends Bloc {
 
   void saveLocation(final String location) {
 
+  }
+
+  String fetchWeatherIconUrl(String icon) {
+    return icon != null && icon.isNotEmpty ? '${Constants.iconPrefix}$icon${Constants.iconSuffix}' : Constants.noImageAvailableUrl;
   }
 }

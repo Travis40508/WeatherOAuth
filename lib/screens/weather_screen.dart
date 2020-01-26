@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:weather_oauth/blocs/weather_bloc.dart';
@@ -85,11 +86,15 @@ class _WeatherScreenState extends State<WeatherScreen> {
                         return ListView.builder(
                           itemCount: snapshot.data.length,
                           itemBuilder: (context, index) {
-                            return RaisedButton(
-                              child: Text(
-                                snapshot.data[index].locationName
+                            LocalForecast forecast = snapshot?.data[index];
+                            return Card(
+                              elevation: Constants.defaultElevation,
+                              child: ListTile(
+                                leading: CachedNetworkImage(
+                                  imageUrl: _bloc.fetchWeatherIconUrl(forecast.icon),
+                                  color: forecast?.icon != null ? Theme.of(context).secondaryHeaderColor : null,
+                                ),
                               ),
-                              onPressed: () => _bloc.removeLocation(_route.googleUser.email, snapshot.data[index].locationName),
                             );
                           },
                         );
@@ -120,7 +125,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
   void observeNavigationEvents() {
     _bloc.errorStream.listen((errorMessage) {
-      showDialog(context: context, builder: (_) => CustomDialog('Bummer', errorMessage, () => Navigator.pop(context)));
+      showDialog(context: context, builder: (_) => CustomDialog(Constants.failureDialogTitle, errorMessage, () => Navigator.pop(context)));
     }, onError: (e) => print(e));
   }
 }

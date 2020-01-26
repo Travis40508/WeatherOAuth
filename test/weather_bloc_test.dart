@@ -273,4 +273,25 @@ void main() {
       _bloc.fetchForecastForLocation(MockData.fetchUserEmail(), query);
     });
   });
+
+  group('icon formatting', () {
+
+    test('formatting icon url when icon is not null', () {
+      final String iconValue = 'foo';
+
+      expect(_bloc.fetchWeatherIconUrl(iconValue), 'http://openweathermap.org/img/wn/foo@2x.png');
+    });
+
+    test('formatting icon url when icon is null', () {
+      final String iconValue = null;
+
+      expect(_bloc.fetchWeatherIconUrl(iconValue), Constants.noImageAvailableUrl);
+    });
+
+    test('formatting icon url when icon is empty', () {
+      final String iconValue = Constants.empty;
+
+      expect(_bloc.fetchWeatherIconUrl(iconValue), Constants.noImageAvailableUrl);
+    });
+  });
 }
