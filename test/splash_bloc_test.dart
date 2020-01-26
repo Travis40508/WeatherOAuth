@@ -1,6 +1,7 @@
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:weather_oauth/blocs/splash_bloc.dart';
+import 'package:weather_oauth/models/google_user.dart';
 import 'package:weather_oauth/services/repository.dart';
 import 'package:weather_oauth/utils/constants.dart';
 
@@ -18,12 +19,12 @@ void main() {
   group('fetching firebase token', () {
 
     test('emitting displayName on token received', () {
-      final displayName = 'foo';
+      final GoogleUser googleUser = GoogleUser('foo', 'fooEmail');
 
-      when(_repository.authenticateUser(true)).thenAnswer((_) => Stream.value(displayName));
+      when(_repository.authenticateUser(true)).thenAnswer((_) => Stream.value(googleUser));
 
-      expectLater(_bloc.displayNameStream, emitsInOrder([
-        emits(displayName)
+      expectLater(_bloc.userStream, emitsInOrder([
+        emits(googleUser)
       ]));
 
       _bloc.fetchFirebaseToken();
@@ -35,19 +36,19 @@ void main() {
 
       when(_repository.authenticateUser(true)).thenAnswer((_) => Stream.error(error));
 
-      expectLater(_bloc.displayNameStream, emitsInOrder([
+      expectLater(_bloc.userStream, emitsInOrder([
         emitsError(error)
       ]));
 
       _bloc.fetchFirebaseToken();
     });
 
-    test('error when displayName is empty', () {
-      final displayName = Constants.empty;
+    test('error when googleUser displayName is empty', () {
+      final GoogleUser googleUser = GoogleUser(Constants.empty, 'fooEmail');
 
-      when(_repository.authenticateUser(true)).thenAnswer((_) => Stream.value(displayName));
+      when(_repository.authenticateUser(true)).thenAnswer((_) => Stream.value(googleUser));
 
-      expectLater(_bloc.displayNameStream, emitsInOrder([
+      expectLater(_bloc.userStream, emitsInOrder([
         emitsError(anything)
       ]));
 

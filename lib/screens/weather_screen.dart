@@ -32,7 +32,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
       appBar: AppBar(
         backgroundColor: Colors.blueAccent,
         title: Text(
-            _route.displayName,
+            _route.googleUser.displayName,
           style: TextStyle(
             color: Colors.white
           ),

@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:weather_oauth/blocs/login_bloc.dart';
+import 'package:weather_oauth/models/google_user.dart';
 import 'package:weather_oauth/services/repository.dart';
 
 import 'mocks/mock_repository.dart';
@@ -17,11 +18,11 @@ void main() {
   group('testing authentication', () {
 
     test('authentication happy path', () {
-      final displayName = "foo";
-      when(_repository.authenticateUser(false)).thenAnswer((_) => Stream.value(displayName));
+      final GoogleUser user = GoogleUser('foo', 'fooEmail');
+      when(_repository.authenticateUser(false)).thenAnswer((_) => Stream.value(user));
 
       expectLater(_bloc.authResultStream, emitsInOrder([
-        emits(displayName)
+        emits(user)
       ]));
 
       _bloc.authenticateUser();

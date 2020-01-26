@@ -1,6 +1,7 @@
 
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:weather_oauth/models/google_user.dart';
 import 'package:weather_oauth/services/repository.dart';
 import 'package:weather_oauth/utils/constants.dart';
 
@@ -8,22 +9,22 @@ class SplashBloc extends Bloc {
 
   final Repository _repository;
 
-  final _displayNameSubject = PublishSubject<String>();
-  Stream<String> get displayNameStream => _displayNameSubject.stream;
+  final userSubject = PublishSubject<GoogleUser>();
+  Stream<GoogleUser> get userStream => userSubject.stream;
 
   SplashBloc(this._repository);
 
 
   void fetchFirebaseToken() {
-    _repository.authenticateUser(true).listen((displayName) {
-      if (displayName.isNotEmpty) {
-        _displayNameSubject.add(displayName);
+    _repository.authenticateUser(true).listen((user) {
+      if (user.displayName.isNotEmpty) {
+        userSubject.add(user);
       } else {
-        _displayNameSubject.addError('displayName shouldn\nt be empty');
+        userSubject.addError('displayName shouldn\nt be empty');
       }
     }, onError: (e) {
       print('SplashBloc.fetchFirebaseToken - $e');
-      _displayNameSubject.addError(e);
+      userSubject.addError(e);
     });
   }
 
@@ -33,7 +34,7 @@ class SplashBloc extends Bloc {
 
   @override
   void dispose() {
-    _displayNameSubject.close();
+    userSubject.close();
   }
 
 }

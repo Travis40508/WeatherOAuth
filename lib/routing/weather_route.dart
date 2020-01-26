@@ -1,10 +1,12 @@
 
+import 'package:weather_oauth/models/google_user.dart';
+
 class WeatherRoute {
   static const routeName = "weatherRoute";
-  final String _displayName;
+  final GoogleUser _googleUser;
 
   ///make route fail if the user doesn't pass in required information
-  WeatherRoute(this._displayName);
+  WeatherRoute(this._googleUser);
 
-  String get displayName => _displayName;
+  GoogleUser get googleUser => _googleUser;
 }

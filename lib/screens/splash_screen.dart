@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void listenForNavigation() {
-    _bloc.displayNameStream
+    _bloc.userStream
         .debounce((_) => TimerStream(true, Duration(seconds: Constants.splashWaitDurationInSeconds)))
         .listen((displayName) {
           Navigator.of(context).pushReplacementNamed(LoginRoute.routeName, arguments: LoginRoute());

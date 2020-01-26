@@ -24,6 +24,7 @@ class WeatherBloc extends Bloc {
     _errorSubject.close();
   }
 
+  ///full unit-test coverage for this heavy function written ahead of implementation
   void fetchForecastForLocation(final String location) {
     if (location == null || location.isEmpty) {
       _errorSubject.add("Please add search criteria.");
@@ -38,7 +39,7 @@ class WeatherBloc extends Bloc {
         }
       }, onError: (e) {
         print('WeatherBloc - $e');
-        _forecastsSubject.addError(e);
+        _errorSubject.add("An error has occurred. Please try again later.");
       });
     } else if (locationAlreadyExists(location)) {
       _errorSubject.add("You have already added $location. Please add a unique location.");

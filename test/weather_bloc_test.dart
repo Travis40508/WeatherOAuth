@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:weather_oauth/blocs/weather_bloc.dart';
 import 'package:weather_oauth/models/local_forecast.dart';
-import 'package:weather_oauth/models/location_current_forecast.dart';
 import 'package:weather_oauth/services/repository.dart';
 import 'package:weather_oauth/utils/constants.dart';
 
@@ -144,6 +143,31 @@ void main() {
       bool alreadyAdded = _bloc.locationAlreadyExists(forecastToAdd.locationName);
 
       expect(alreadyAdded, true);
+    });
+
+    test('general error scenario for adding location', () async {
+      final error = Error();
+      final String searchQuery = 'foo';
+
+      when(_repository.fetchWeatherDataForLocation(searchQuery)).thenAnswer((_) => Stream.error(error));
+
+      expectLater(_bloc.errorStream, emitsInOrder([
+        emits(anything)
+      ]));
+
+      await _bloc.fetchForecastForLocation(searchQuery);
+    });
+
+    test('general error scenario for all locations', () async {
+      final error = Error();
+
+      when(_repository.fetchAllWeatherData()).thenAnswer((_) => Stream.error(error));
+
+      expectLater(_bloc.forecastsStream, emitsInOrder([
+        emitsError(error)
+      ]));
+
+      await _bloc.fetchAllForecastsForUser();
     });
   });
 

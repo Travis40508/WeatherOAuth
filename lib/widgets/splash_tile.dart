@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:weather_oauth/blocs/splash_bloc.dart';
+import 'package:weather_oauth/models/google_user.dart';
 import 'package:weather_oauth/utils/constants.dart';
 import 'package:weather_oauth/utils/size_config.dart';
 
@@ -40,10 +41,10 @@ class _SplashTileState extends State<SplashTile> {
           Padding(
             padding: const EdgeInsets.all(Constants.defaultPadding),
             child: StreamBuilder(
-              stream: _bloc.displayNameStream,
-              builder: (context, AsyncSnapshot<String> snapshot) {
+              stream: _bloc.userStream,
+              builder: (context, AsyncSnapshot<GoogleUser> snapshot) {
                 return snapshot.hasData ? Text(
-                  _bloc?.fetchGreeting(snapshot?.data),
+                  _bloc?.fetchGreeting(snapshot.data.displayName),
                   style: Theme.of(context).textTheme?.subtitle,
                   textAlign: TextAlign.center,
                 ) : Container();
