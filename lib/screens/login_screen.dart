@@ -19,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.didChangeDependencies();
     _bloc = BlocProvider.of<LoginBloc>(context);
 
-    _bloc.authResultStream.listen((user) {
+    _bloc?.authResultStream?.listen((user) {
       Navigator.of(context).pushReplacementNamed(WeatherRoute.routeName, arguments: WeatherRoute(user));
     }, onError: (e) => print(e));
   }
@@ -38,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
         children: <Widget>[
           LoginTile(),
           StreamBuilder(
-            stream: _bloc.loadingStream,
+            stream: _bloc?.loadingStream,
             initialData: false,
             builder: (context, snapshot) {
               if (snapshot.data) {

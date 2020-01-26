@@ -6,8 +6,9 @@ class CustomDialog extends StatelessWidget {
   final String dialogTitle;
   final String dialogMessage;
   final VoidCallback positiveCallback;
+  final VoidCallback negativeCallback;
 
-  CustomDialog(this.dialogTitle, this.dialogMessage, this.positiveCallback);
+  CustomDialog(this.dialogTitle, this.dialogMessage, this.positiveCallback, {this.negativeCallback});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,15 @@ class CustomDialog extends StatelessWidget {
             style: Theme.of(context).textTheme.subhead,
           ),
           onPressed: positiveCallback,
-        )
+        ),
+        negativeCallback != null ? FlatButton(
+          onPressed: negativeCallback,
+          color: Theme.of(context).appBarTheme.color,
+          child: Text(
+            Constants.cancel,
+            style: Theme.of(context).textTheme.subhead,
+          ),
+        ) : Container()
       ],
     );
   }

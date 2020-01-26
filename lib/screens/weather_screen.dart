@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:weather_oauth/blocs/weather_bloc.dart';
 import 'package:weather_oauth/models/local_forecast.dart';
+import 'package:weather_oauth/routing/login_route.dart';
 import 'package:weather_oauth/routing/weather_route.dart';
 import 'package:weather_oauth/utils/constants.dart';
 import 'package:weather_oauth/utils/size_config.dart';
@@ -27,7 +28,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
     if (_bloc == null) {
       _bloc = BlocProvider.of<WeatherBloc>(context);
-      _bloc.fetchAllForecastsForUser(_route.googleUser.email);
+      _bloc?.fetchAllForecastsForUser(_route?.googleUser?.email);
 
       observeNavigationEvents();
     }
@@ -48,6 +49,24 @@ class _WeatherScreenState extends State<WeatherScreen> {
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         backgroundColor: Theme.of(context).appBarTheme.color,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+                Icons.person,
+            color: Theme.of(context).iconTheme.color,),
+            onPressed: () {
+              showDialog(context: context, builder: (context) => CustomDialog(
+                Constants.signingOffTitle,
+                Constants.signingOffMessage,
+                  () {
+                    Navigator.pop(context);
+                    _bloc?.signUserOut();
+                  },
+                  negativeCallback: () => Navigator.pop(context),
+              ));
+            },
+          ),
+        ],
         title: Row(
           children: <Widget>[
             Padding(
@@ -61,9 +80,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 ),
               ),
             ),
-            Text(
-                '${Constants.forecastForPrefix} ${_route.googleUser.displayName}',
-              style: Theme.of(context).textTheme.subhead,
+            Expanded(
+              child: Text(
+                  '${Constants.forecastForPrefix} ${_route?.googleUser?.displayName}',
+                style: Theme.of(context).textTheme.subhead,
+                overflow: TextOverflow.clip,
+              ),
             )
           ],
         )
@@ -84,7 +106,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     builder: (context, AsyncSnapshot<List<LocalForecast>> snapshot) {
                       if (snapshot.hasData) {
                         return ListView.builder(
-                          itemCount: snapshot.data.length,
+                          itemCount: snapshot?.data?.length,
                           itemBuilder: (context, index) {
                             LocalForecast forecast = snapshot?.data[index];
                             return WeatherTile(forecast, () {
@@ -98,7 +120,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     },
                   ),
                   StreamBuilder(
-                    stream: _bloc.loadingStream,
+                    stream: _bloc?.loadingStream,
                     initialData: false,
                     builder: (context, snapshot) {
                       if (snapshot.data) {
@@ -117,20 +139,23 @@ class _WeatherScreenState extends State<WeatherScreen> {
   }
 
   void observeNavigationEvents() {
-    _bloc.errorStream.listen((errorMessage) {
+    _bloc?.errorStream?.listen((errorMessage) {
       showDialog(context: context, builder: (_) => CustomDialog(Constants.failureDialogTitle, errorMessage, () => Navigator.pop(context)));
+    }, onError: (e) => print(e));
+
+    _bloc?.signOutStream?.listen((signingOut) {
+      Navigator.pushReplacementNamed(context, LoginRoute.routeName, arguments: LoginRoute());
     }, onError: (e) => print(e));
   }
 
   void handleOnLongClick(final LocalForecast forecast) {
-    _bloc.removeLocation(_route.googleUser.email, forecast.locationName);
-    Scaffold.of(context).showSnackBar(SnackBar(
-      backgroundColor: Theme.of(context).appBarTheme.color,
-      content: Text(
-          '${forecast.locationName} ${Constants.deletedText}',
-          style: Theme.of(context).textTheme.subhead
-      ),
-    ),
-    );
+    showDialog(context: context, builder: (_) => CustomDialog(
+        '${Constants.deletingText} ${forecast.locationName}',
+        Constants.deletionConfirmation,
+            () {
+              _bloc?.removeLocation(_route?.googleUser?.email, forecast?.locationName);
+              Navigator.pop(context);
+            }
+      , negativeCallback: () => Navigator.pop(context),));
   }
 }

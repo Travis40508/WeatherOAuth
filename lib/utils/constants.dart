@@ -11,11 +11,16 @@ class Constants {
   static const searchLabel = "Search by City";
   static const searchHint = "Ex. Columbus";
   static const OK = "OK";
+  static const cancel = "Cancel";
   static const addTileLabel = 'Add a Forecast to get Started!';
   static const failureDialogTitle = 'Bummer';
   static const forecastForPrefix = 'Forecasts for';
   static const degreeSymbol = '\u00b0';
   static const deletedText = 'Removed';
+  static const deletingText = 'Deleting';
+  static const deletionConfirmation = 'Are you sure you wish to delete this location?';
+  static const signingOffTitle = 'Signing Off?';
+  static const signingOffMessage = 'Are you sure you wish to sign out?';
 
 
   //tags

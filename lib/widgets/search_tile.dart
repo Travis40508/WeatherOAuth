@@ -18,11 +18,11 @@ class _SearchTileState extends State<SearchTile> {
 
   @override
   void didChangeDependencies() {
-    _route = ModalRoute.of(context).settings.arguments;
+    _route = ModalRoute.of(context)?.settings?.arguments;
 
     if (_bloc == null) {
       _bloc = BlocProvider.of<WeatherBloc>(context);
-      _bloc.fetchAllForecastsForUser(_route.googleUser.email);
+      _bloc.fetchAllForecastsForUser(_route?.googleUser?.email);
     }
 
     super.didChangeDependencies();
@@ -33,7 +33,7 @@ class _SearchTileState extends State<SearchTile> {
     return TextField(
       onSubmitted: (query) {
         _bloc.fetchForecastForLocation(_route.googleUser.email, query);
-        _controller.clear();
+        _controller?.clear();
       },
       textInputAction: TextInputAction.go,
       style: Theme.of(context).textTheme.subhead,
@@ -63,7 +63,7 @@ class _SearchTileState extends State<SearchTile> {
         suffixIcon: IconButton(
           icon: Icon(Icons.clear),
           color: Theme.of(context).iconTheme.color,
-          onPressed: () => _controller.clear(),
+          onPressed: () => _controller?.clear(),
         ),
       ),
       maxLines: 1,

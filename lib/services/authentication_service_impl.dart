@@ -1,11 +1,14 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:weather_oauth/routing/login_route.dart';
+import 'package:weather_oauth/routing/weather_route.dart';
 import 'package:weather_oauth/services/authentication_service.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthenticationServiceImpl implements AuthenticationService {
 
   FirebaseAuth _auth;
+  GoogleSignIn _googleSignIn;
 
   @override
   Future<AuthResult> fetchGoogleAuthentication(final bool signInSilently) async {
@@ -13,13 +16,13 @@ class AuthenticationServiceImpl implements AuthenticationService {
       _auth = FirebaseAuth.instance;
     }
 
-    final GoogleSignIn _googleSignIn = GoogleSignIn();
+    _googleSignIn = GoogleSignIn();
 
     final GoogleSignInAccount googleSignInAccount = signInSilently ? await _googleSignIn?.signInSilently(suppressErrors: false) : await _googleSignIn?.signIn();
 
     final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount?.authentication;
 
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
+    final AuthCredential credential = GoogleAuthProvider?.getCredential(
       accessToken: googleSignInAuthentication?.accessToken,
       idToken: googleSignInAuthentication?.idToken,
     );
@@ -30,6 +33,12 @@ class AuthenticationServiceImpl implements AuthenticationService {
     assert(authResult.user.displayName.isNotEmpty);
 
     return authResult;
+  }
+
+  @override
+  Future<void> signOutUser() async {
+    await _googleSignIn?.signOut();
+    return await _auth?.signOut();
   }
 
 }

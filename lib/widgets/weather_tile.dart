@@ -42,19 +42,19 @@ class _WeatherTileState extends State<WeatherTile> {
           elevation: Constants.defaultElevation,
           child: ListTile(
             leading: CachedNetworkImage(
-              imageUrl: _bloc.fetchWeatherIconUrl(widget.forecast.icon),
+              imageUrl: _bloc?.fetchWeatherIconUrl(widget.forecast.icon),
               color: widget.forecast?.icon != null ? Theme.of(context).secondaryHeaderColor : null,
             ),
             title: Text(
-                '${widget.forecast.locationName}, ${widget.forecast.country}'
+                '${widget.forecast?.locationName}, ${widget.forecast?.country}'
             ),
             subtitle: Text(
-                widget.forecast.description
+                widget.forecast?.description
             ),
             trailing: CircleAvatar(
               backgroundColor: Theme.of(context).primaryColor,
               child: Text(
-                _bloc.kelvinToFahrenheit(widget.forecast.currentTemp),
+                _bloc.kelvinToFahrenheit(widget.forecast?.currentTemp),
                 style: Theme.of(context).textTheme.subhead,
               ),
             ),
