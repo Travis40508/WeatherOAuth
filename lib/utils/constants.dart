@@ -10,6 +10,7 @@ class Constants {
   static const searchLabel = "Search by City";
   static const searchHint = "Ex. Columbus";
   static const OK = "OK";
+  static const addTileLabel = 'Add a Forecast to get Started!';
 
 
   //tags
@@ -22,4 +23,6 @@ class Constants {
   static const mediumText = 36.0;
   static const smallText = 18.0;
   static const defaultBorderWidth = 2.0;
+  static const defaultLoadingTileWidthPercentage = 85;
+  static const defaultLoadingTileHeight = 60.0;
 }

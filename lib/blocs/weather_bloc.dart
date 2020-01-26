@@ -1,5 +1,6 @@
 
 
+import 'package:flutter/foundation.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,25 +17,32 @@ class WeatherBloc extends Bloc {
   final _errorSubject = PublishSubject<String>();
   Stream<String> get errorStream => _errorSubject.stream;
 
+  final _loadingSubject = PublishSubject<bool>();
+  Stream<bool> get loadingStream => _loadingSubject.stream;
+
   WeatherBloc(this._repository);
 
   @override
   void dispose() {
     _forecastsSubject.close();
     _errorSubject.close();
+    _loadingSubject.close();
   }
 
   ///full unit-test coverage for this function can be found in weather_bloc_test.dart file
   void fetchForecastForLocation(final String userEmail, final String location) {
+    _loadingSubject.add(true);
     if (location == null || location.isEmpty) {
       _errorSubject.add("Please add search criteria.");
     } else if (_forecastsSubject.value == null || (_forecastsSubject.value.length < 5 && !locationAlreadyExists(location))) {
       _repository.fetchWeatherDataForLocation(userEmail, location).listen((forecast) {
         List<LocalForecast> forecasts = _forecastsSubject.value ?? List();
           forecasts?.add(forecast);
+          _loadingSubject.add(false);
           _forecastsSubject.add(forecasts);
       }, onError: (e) {
         print('WeatherBloc - $e');
+        _loadingSubject.add(false);
         _errorSubject.add("No location found. Please try again");
       });
     } else if (locationAlreadyExists(location)) {
@@ -55,14 +63,17 @@ class WeatherBloc extends Bloc {
   }
 
   void fetchAllForecastsForUser(final String userEmail) async {
+    _loadingSubject.add(true);
     _repository.fetchAllWeatherData(userEmail).listen((forecasts) {
       if (forecasts != null && forecasts.isNotEmpty) {
         _forecastsSubject.add(forecasts);
       } else {
         _forecastsSubject.addError('No locations available');
       }
+      _loadingSubject.add(false);
     }, onError: (e) {
       print('WeatherBloc.fetchAllForecastsForUser() -. $e');
+      _loadingSubject.add(false);
       _forecastsSubject.addError(e);
     });
   }

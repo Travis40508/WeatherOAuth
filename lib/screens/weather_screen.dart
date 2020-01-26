@@ -6,6 +6,7 @@ import 'package:weather_oauth/routing/weather_route.dart';
 import 'package:weather_oauth/utils/constants.dart';
 import 'package:weather_oauth/utils/size_config.dart';
 import 'package:weather_oauth/widgets/custom_dialog.dart';
+import 'package:weather_oauth/widgets/no_forecasts_tile.dart';
 import 'package:weather_oauth/widgets/search_tile.dart';
 
 class WeatherScreen extends StatefulWidget {
@@ -74,40 +75,54 @@ class _WeatherScreenState extends State<WeatherScreen> {
               child: SearchTile()
             ),
             Expanded(
-              child: StreamBuilder(
-                stream: _bloc.forecastsStream,
-                builder: (context, AsyncSnapshot<List<LocalForecast>> snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (context, index) {
-                        return RaisedButton(
-                          child: Text(
-                            snapshot.data[index].locationName
-                          ),
-                          onPressed: () => _bloc.removeLocation(_route.googleUser.email, snapshot.data[index].locationName),
+              child: Stack(
+                children: <Widget>[
+                  StreamBuilder(
+                    stream: _bloc.loadingStream,
+                    initialData: false,
+                    builder: (context, snapshot) {
+                      if (snapshot.data) {
+                        return Center(
+                            child: Card(
+                              color: Theme.of(context).appBarTheme.color,
+                              elevation: Constants.defaultElevation,
+                              child: Container(
+                                height: Constants.defaultLoadingTileHeight,
+                                width: SizeConfig.getPercentageOfScreenWidth(Constants.defaultLoadingTileWidthPercentage, context),
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    backgroundColor: Theme.of(context).secondaryHeaderColor,
+                                  ),
+                                ),
+                              ),
+                            ),
                         );
-                      },
-                    );
-                  }
+                      }
 
-                  return Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(Constants.defaultPadding),
-                            child: Icon(Icons.wb_sunny),
-                          ),
-                          Text(
-                            'Add a Forecast to get Started!',
-                            style: Theme.of(context).textTheme.subhead,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      )
-                  );
-                },
+                      return Container();
+                    },
+                  ),
+                  StreamBuilder(
+                    stream: _bloc.forecastsStream,
+                    builder: (context, AsyncSnapshot<List<LocalForecast>> snapshot) {
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (context, index) {
+                            return RaisedButton(
+                              child: Text(
+                                snapshot.data[index].locationName
+                              ),
+                              onPressed: () => _bloc.removeLocation(_route.googleUser.email, snapshot.data[index].locationName),
+                            );
+                          },
+                        );
+                      }
+
+                      return NoForecastsTile();
+                    },
+                  ),
+                ],
               ),
             )
           ],
