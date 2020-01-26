@@ -62,4 +62,9 @@ class RepositoryImpl implements Repository {
 
     sharedPreferences.setStringList(userEmail, savedLocations);
   }
+
+  @override
+  Future<void> signUserOut() async {
+    return await _authService.signOutUser();
+  }
 }

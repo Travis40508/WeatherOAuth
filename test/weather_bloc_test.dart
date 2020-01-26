@@ -346,4 +346,14 @@ void main() {
 
     expect(_bloc.kelvinToFahrenheit(freezingZeroKelvin), '32${Constants.degreeSymbol}');
   });
+
+  test('signing out', () {
+    when(_repository.signUserOut()).thenAnswer((_) => Future.value(anything));
+
+    expectLater(_bloc.signOutStream, emitsInOrder([
+      emits(true)
+    ]));
+
+    _bloc.signUserOut();
+  });
 }

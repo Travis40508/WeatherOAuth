@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:weather_oauth/blocs/weather_bloc.dart';
 import 'package:weather_oauth/models/local_forecast.dart';
+import 'package:weather_oauth/routing/login_route.dart';
 import 'package:weather_oauth/routing/weather_route.dart';
 import 'package:weather_oauth/utils/constants.dart';
 import 'package:weather_oauth/utils/size_config.dart';
@@ -48,6 +49,24 @@ class _WeatherScreenState extends State<WeatherScreen> {
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         backgroundColor: Theme.of(context).appBarTheme.color,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+                Icons.person,
+            color: Theme.of(context).iconTheme.color,),
+            onPressed: () {
+              showDialog(context: context, builder: (context) => CustomDialog(
+                'Signing Off?',
+                'Are you sure you wish to sign out?',
+                  () {
+                    Navigator.pop(context);
+                    _bloc.signUserOut();
+                  },
+                  negativeCallback: () => Navigator.pop(context),
+              ));
+            },
+          ),
+        ],
         title: Row(
           children: <Widget>[
             Padding(
@@ -119,6 +138,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
   void observeNavigationEvents() {
     _bloc.errorStream.listen((errorMessage) {
       showDialog(context: context, builder: (_) => CustomDialog(Constants.failureDialogTitle, errorMessage, () => Navigator.pop(context)));
+    }, onError: (e) => print(e));
+
+    _bloc.signOutStream.listen((signingOut) {
+      Navigator.pushReplacementNamed(context, LoginRoute.routeName, arguments: LoginRoute());
     }, onError: (e) => print(e));
   }
 

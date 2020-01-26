@@ -19,4 +19,7 @@ abstract class Repository {
 
   ///Saves a new location to the cache with the GoogleUser email address acting as the key
   void saveNewLocation(final String userEmail, final String location);
+
+  ///Signs user out of the app
+  Future<void> signUserOut();
 }

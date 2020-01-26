@@ -17,6 +17,9 @@ class WeatherBloc extends Bloc {
   final _loadingSubject = PublishSubject<bool>();
   Stream<bool> get loadingStream => _loadingSubject.stream;
 
+  final _signOutSubject = PublishSubject<bool>();
+  Stream<bool> get signOutStream => _signOutSubject.stream;
+
   WeatherBloc(this._repository);
 
   @override
@@ -24,6 +27,7 @@ class WeatherBloc extends Bloc {
     _forecastsSubject.close();
     _errorSubject.close();
     _loadingSubject.close();
+    _signOutSubject.close();
   }
 
   ///full unit-test coverage for this function can be found in weather_bloc_test.dart file
@@ -119,5 +123,11 @@ class WeatherBloc extends Bloc {
   void handleTooManyLocationsScenario() {
     _loadingSubject.add(false);
     _errorSubject.add("You already have 5 locations. Please remove one before trying to add another");
+  }
+
+  ///Signs user out of the app, informing the _signOutSubject once it's finished.
+  void signUserOut() {
+    _repository.signUserOut();
+    _signOutSubject.add(true);
   }
 }
