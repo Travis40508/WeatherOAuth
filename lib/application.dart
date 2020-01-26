@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:weather_oauth/blocs/login_bloc.dart';
 import 'package:weather_oauth/blocs/splash_bloc.dart';
+import 'package:weather_oauth/blocs/weather_bloc.dart';
 import 'package:weather_oauth/routing/login_route.dart';
 import 'package:weather_oauth/routing/weather_route.dart';
 import 'package:weather_oauth/screens/login_screen.dart';
@@ -13,7 +13,6 @@ import 'package:weather_oauth/services/repository_impl.dart';
 import 'package:weather_oauth/utils/constants.dart';
 
 class Application extends StatelessWidget {
-
   ///since this is a small app, we're going to use one instance of our repo class, since Firebase is such an expensive object
   final Repository _repository = RepositoryImpl();
 
@@ -27,52 +26,44 @@ class Application extends StatelessWidget {
       title: Constants.appTitle,
       debugShowCheckedModeBanner: false,
       home: BlocProvider(
-        bloc: LoginBloc(_repository),
-        child: LoginScreen(),
+          bloc: SplashBloc(_repository),
+          child: SplashScreen()
       ),
-//      home: BlocProvider(
-//          bloc: SplashBloc(_repository),
-//          child: SplashScreen()
-//      ),
       routes: {
-        LoginRoute.routeName : (context) => BlocProvider(
-          bloc: LoginBloc(_repository),
-          child: LoginScreen(),
-        ),
-        WeatherRoute.routeName : (context) => WeatherScreen()
+        LoginRoute.routeName: (context) => BlocProvider(
+              bloc: LoginBloc(_repository),
+              child: LoginScreen(),
+            ),
+        WeatherRoute.routeName: (context) => BlocProvider(
+              bloc: WeatherBloc(_repository),
+              child: WeatherScreen(),
+            ),
       },
       theme: ThemeData(
-        backgroundColor: primaryColor,
-        iconTheme: IconThemeData(
-          color: secondaryColor
-        ),
-        appBarTheme: AppBarTheme(
-          color: appBarColor,
+          backgroundColor: primaryColor,
+          iconTheme: IconThemeData(color: secondaryColor),
+          appBarTheme: AppBarTheme(
+            color: appBarColor,
+            textTheme: TextTheme(
+              title: TextStyle(
+                color: secondaryColor,
+                fontSize: Constants.smallText,
+              ),
+            ),
+          ),
           textTheme: TextTheme(
               title: TextStyle(
                   color: secondaryColor,
+                  fontSize: Constants.largeText,
+                  fontWeight: FontWeight.bold),
+              subtitle: TextStyle(
+                  color: secondaryColor,
+                  fontSize: Constants.mediumText,
+                  fontWeight: FontWeight.bold),
+              subhead: TextStyle(
+                  color: secondaryColor,
                   fontSize: Constants.smallText,
-              ),
-          ),
-        ),
-        textTheme: TextTheme(
-          title: TextStyle(
-            color: secondaryColor,
-            fontSize: Constants.largeText,
-            fontWeight: FontWeight.bold
-          ),
-          subtitle: TextStyle(
-              color: secondaryColor,
-              fontSize: Constants.mediumText,
-              fontWeight: FontWeight.bold
-          ),
-          subhead: TextStyle(
-            color: secondaryColor,
-            fontSize: Constants.smallText,
-            fontWeight: FontWeight.bold
-          )
-        )
-      ),
+                  fontWeight: FontWeight.bold))),
     );
   }
 }
