@@ -12,6 +12,7 @@ class Constants {
   static const OK = "OK";
   static const addTileLabel = 'Add a Forecast to get Started!';
   static const failureDialogTitle = 'Bummer';
+  static const forecastForPrefix = 'Forecasts for';
   static const degreeSymbol = '\u00b0';
 
 
