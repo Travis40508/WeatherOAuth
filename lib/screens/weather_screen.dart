@@ -6,6 +6,7 @@ import 'package:weather_oauth/routing/weather_route.dart';
 import 'package:weather_oauth/utils/constants.dart';
 import 'package:weather_oauth/utils/size_config.dart';
 import 'package:weather_oauth/widgets/custom_dialog.dart';
+import 'package:weather_oauth/widgets/custom_loading_tile.dart';
 import 'package:weather_oauth/widgets/no_forecasts_tile.dart';
 import 'package:weather_oauth/widgets/search_tile.dart';
 
@@ -78,31 +79,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
               child: Stack(
                 children: <Widget>[
                   StreamBuilder(
-                    stream: _bloc.loadingStream,
-                    initialData: false,
-                    builder: (context, snapshot) {
-                      if (snapshot.data) {
-                        return Center(
-                            child: Card(
-                              color: Theme.of(context).appBarTheme.color,
-                              elevation: Constants.defaultElevation,
-                              child: Container(
-                                height: Constants.defaultLoadingTileHeight,
-                                width: SizeConfig.getPercentageOfScreenWidth(Constants.defaultLoadingTileWidthPercentage, context),
-                                child: Center(
-                                  child: CircularProgressIndicator(
-                                    backgroundColor: Theme.of(context).secondaryHeaderColor,
-                                  ),
-                                ),
-                              ),
-                            ),
-                        );
-                      }
-
-                      return Container();
-                    },
-                  ),
-                  StreamBuilder(
                     stream: _bloc.forecastsStream,
                     builder: (context, AsyncSnapshot<List<LocalForecast>> snapshot) {
                       if (snapshot.hasData) {
@@ -120,6 +96,17 @@ class _WeatherScreenState extends State<WeatherScreen> {
                       }
 
                       return NoForecastsTile();
+                    },
+                  ),
+                  StreamBuilder(
+                    stream: _bloc.loadingStream,
+                    initialData: false,
+                    builder: (context, snapshot) {
+                      if (snapshot.data) {
+                        return CustomLoadingTile();
+                      }
+
+                      return Container();
                     },
                   ),
                 ],

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:weather_oauth/blocs/login_bloc.dart';
 import 'package:weather_oauth/routing/weather_route.dart';
-import 'package:weather_oauth/utils/constants.dart';
-import 'package:weather_oauth/utils/size_config.dart';
+import 'package:weather_oauth/widgets/custom_loading_tile.dart';
 import 'package:weather_oauth/widgets/login_tile.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -35,7 +34,22 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      body: LoginTile()
+      body: Stack(
+        children: <Widget>[
+          LoginTile(),
+          StreamBuilder(
+            stream: _bloc.loadingStream,
+            initialData: false,
+            builder: (context, snapshot) {
+              if (snapshot.data) {
+                return CustomLoadingTile();
+              }
+
+              return Container();
+            },
+          ),
+        ],
+      ),
     );
   }
 }

@@ -25,10 +25,14 @@ class Application extends StatelessWidget {
     return MaterialApp(
       title: Constants.appTitle,
       debugShowCheckedModeBanner: false,
-      home: BlocProvider(
-          bloc: SplashBloc(_repository),
-          child: SplashScreen()
-      ),
+//      home: BlocProvider(
+//          bloc: SplashBloc(_repository),
+//          child: SplashScreen()
+//      ),
+    home: BlocProvider(
+      bloc: LoginBloc(_repository),
+      child: LoginScreen(),
+    ),
       routes: {
         LoginRoute.routeName: (context) => BlocProvider(
               bloc: LoginBloc(_repository),
