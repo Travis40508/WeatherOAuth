@@ -1,5 +1,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:weather_oauth/routing/login_route.dart';
+import 'package:weather_oauth/routing/weather_route.dart';
 import 'package:weather_oauth/services/authentication_service.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -35,8 +37,8 @@ class AuthenticationServiceImpl implements AuthenticationService {
 
   @override
   Future<void> signOutUser() async {
-    await _googleSignIn.signOut();
-    return await _auth.signOut();
+    await _googleSignIn?.signOut();
+    return await _auth?.signOut();
   }
 
 }
