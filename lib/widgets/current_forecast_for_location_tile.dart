@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_oauth/models/location_current_forecast.dart';
+import 'package:weather_oauth/models/location_current_forecast_res.dart';
 
 class CurrentForecastForLocationTile extends StatefulWidget {
 

@@ -3,7 +3,7 @@
 
 import 'package:weather_oauth/models/google_user.dart';
 import 'package:weather_oauth/models/local_forecast.dart';
-import 'package:weather_oauth/models/location_current_forecast.dart';
+import 'package:weather_oauth/models/location_current_forecast_res.dart';
 
 abstract class Repository {
 

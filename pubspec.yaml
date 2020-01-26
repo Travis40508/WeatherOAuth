@@ -32,10 +32,13 @@ dependencies:
 # For architecture
   generic_bloc_provider: ^1.0.9
   rxdart: ^0.23.1
-  shared_preferences: ^0.5.6+1
 
 # For unit testing
   mockito: ^4.1.1
+
+#  For Data
+  http: ^0.12.0+4
+  shared_preferences: ^0.5.6+1
 
 dev_dependencies:
   flutter_test:
