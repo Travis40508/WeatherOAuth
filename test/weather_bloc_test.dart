@@ -294,4 +294,10 @@ void main() {
       expect(_bloc.fetchWeatherIconUrl(iconValue), Constants.noImageAvailableUrl);
     });
   });
+
+  test('kelvin to fahrenheit', () {
+    final double freezingZeroKelvin = 273.15;
+
+    expect(_bloc.kelvinToFahrenheit(freezingZeroKelvin), '32${Constants.degreeSymbol}');
+  });
 }

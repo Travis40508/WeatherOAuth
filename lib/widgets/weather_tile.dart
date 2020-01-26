@@ -6,6 +6,7 @@ import 'package:weather_oauth/blocs/weather_bloc.dart';
 import 'package:weather_oauth/models/local_forecast.dart';
 import 'package:weather_oauth/utils/constants.dart';
 import 'package:weather_oauth/utils/size_config.dart';
+import 'package:weather_oauth/widgets/temperature_tile.dart';
 
 class WeatherTile extends StatefulWidget {
 
@@ -64,30 +65,8 @@ class _WeatherTileState extends State<WeatherTile> {
           width: SizeConfig.getPercentageOfScreenWidth(Constants.defaultLoadingTileWidthPercentage, context),
           child: Row(
             children: <Widget>[
-              Expanded(
-                child: Container(
-                  child: Text(
-                    _bloc.kelvinToFahrenheit(widget.forecast.maxTemp),
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.title,
-                  ),
-                  color: Colors.red,
-                  height: double.infinity,
-                  alignment: Alignment.center,
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  child: Text(
-                    _bloc.kelvinToFahrenheit(widget.forecast.minTemp),
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.title,
-                  ),
-                  color: Colors.lightBlue,
-                  height: double.infinity,
-                  alignment: Alignment.center,
-                ),
-              ),
+              TemperatureTile(_bloc.kelvinToFahrenheit(widget.forecast.maxTemp), Colors.red),
+              TemperatureTile(_bloc.kelvinToFahrenheit(widget.forecast.minTemp), Colors.lightBlue),
             ],
           ),
         ),
