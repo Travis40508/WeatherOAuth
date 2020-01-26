@@ -123,14 +123,13 @@ class _WeatherScreenState extends State<WeatherScreen> {
   }
 
   void handleOnLongClick(final LocalForecast forecast) {
-    _bloc.removeLocation(_route.googleUser.email, forecast.locationName);
-    Scaffold.of(context).showSnackBar(SnackBar(
-      backgroundColor: Theme.of(context).appBarTheme.color,
-      content: Text(
-          '${forecast.locationName} ${Constants.deletedText}',
-          style: Theme.of(context).textTheme.subhead
-      ),
-    ),
-    );
+    showDialog(context: context, builder: (_) => CustomDialog(
+        '${Constants.deletingText} ${forecast.locationName}',
+        Constants.deletionConfirmation,
+            () {
+              _bloc.removeLocation(_route?.googleUser?.email, forecast?.locationName);
+              Navigator.pop(context);
+            }
+      , negativeCallback: () => Navigator.pop(context),));
   }
 }
