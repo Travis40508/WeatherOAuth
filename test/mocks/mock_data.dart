@@ -28,4 +28,8 @@ class MockData {
 
     return forecasts;
   }
+
+  static String fetchUserEmail() {
+    return 'fooMail@gmail.com';
+  }
 }

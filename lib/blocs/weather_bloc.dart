@@ -58,8 +58,8 @@ class WeatherBloc extends Bloc {
     return alreadyExists;
   }
 
-  void fetchAllForecastsForUser() async {
-    _repository.fetchAllWeatherData().listen((forecasts) {
+  void fetchAllForecastsForUser(final String userEmail) async {
+    _repository.fetchAllWeatherData(userEmail).listen((forecasts) {
       if (forecasts != null && forecasts.isNotEmpty) {
         _forecastsSubject.add(forecasts);
       } else {
@@ -71,8 +71,8 @@ class WeatherBloc extends Bloc {
     });
   }
 
-  void removeLocation(final String location) {
-    _repository.removeLocation(location)
+  void removeLocation(final String userEmail, final String location) {
+    _repository.removeLocation(userEmail, location)
     .listen((success) {
       if (success) {
         List<LocalForecast> forecasts = _forecastsSubject?.value;

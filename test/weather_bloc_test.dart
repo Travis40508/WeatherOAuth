@@ -25,7 +25,7 @@ void main() {
       final List<LocalForecast> forecasts = MockData.getMockLocalForecastList(4);
       final LocalForecast foreCastForFoo = MockData.getMockLocalForecast();
 
-      when(_repository.fetchAllWeatherData()).thenAnswer((_) => Stream.value(forecasts));
+      when(_repository.fetchAllWeatherData(MockData.fetchUserEmail())).thenAnswer((_) => Stream.value(forecasts));
       when(_repository.fetchWeatherDataForLocation(location)).thenAnswer((_) => Stream.value(foreCastForFoo));
 
       List newForecasts = List();
@@ -38,7 +38,7 @@ void main() {
       ]));
 
       ///warning is invalid - ensures that functions are ran synchronously
-      await _bloc.fetchAllForecastsForUser();
+      await _bloc.fetchAllForecastsForUser(MockData.fetchUserEmail());
       _bloc.fetchForecastForLocation(location);
     });
 
@@ -47,7 +47,7 @@ void main() {
       final LocalForecast foreCastForFoo = MockData.getMockLocalForecast();
       final List<LocalForecast> forecasts = List();
 
-      when(_repository.fetchAllWeatherData()).thenAnswer((_) => Stream.value(forecasts));
+      when(_repository.fetchAllWeatherData(MockData.fetchUserEmail())).thenAnswer((_) => Stream.value(forecasts));
 
       when(_repository.fetchWeatherDataForLocation(location)).thenAnswer((_) => Stream.value(foreCastForFoo));
 
@@ -60,7 +60,7 @@ void main() {
         emits(newForecasts)
       ]));
 
-      await _bloc.fetchAllForecastsForUser();
+      await _bloc.fetchAllForecastsForUser(MockData.fetchUserEmail());
       _bloc.fetchForecastForLocation(location);
     });
 
@@ -68,8 +68,8 @@ void main() {
       final List<LocalForecast> forecasts = MockData.getMockLocalForecastList(4);
       final String locationToDelete = forecasts[2]?.locationName;
 
-      when(_repository.fetchAllWeatherData()).thenAnswer((_) => Stream.value(forecasts));
-      when(_repository.removeLocation(locationToDelete)).thenAnswer((_) => Stream.value(true));
+      when(_repository.fetchAllWeatherData(MockData.fetchUserEmail())).thenAnswer((_) => Stream.value(forecasts));
+      when(_repository.removeLocation(MockData.fetchUserEmail(), locationToDelete)).thenAnswer((_) => Stream.value(true));
 
       List<LocalForecast> newForecasts = List();
       newForecasts.addAll(forecasts);
@@ -81,26 +81,26 @@ void main() {
         emits(newForecasts)
       ]));
 
-      await _bloc.fetchAllForecastsForUser();
-      _bloc.removeLocation(locationToDelete);
+      await _bloc.fetchAllForecastsForUser(MockData.fetchUserEmail());
+      _bloc.removeLocation(MockData.fetchUserEmail(), locationToDelete);
     });
 
     test('checking all locations and succeeds if there are not any', () {
 
-      when(_repository.fetchAllWeatherData()).thenAnswer((_) => Stream.value(null));
+      when(_repository.fetchAllWeatherData(MockData.fetchUserEmail())).thenAnswer((_) => Stream.value(null));
 
       expectLater(_bloc.forecastsStream, emitsInOrder([
         emitsError(anything)
       ]));
 
-      _bloc.fetchAllForecastsForUser();
+      _bloc.fetchAllForecastsForUser(MockData.fetchUserEmail());
     });
 
     test('stopping user from adding more than 5 places successfully', () async {
       final List<LocalForecast> forecasts = MockData.getMockLocalForecastList(5);
       final LocalForecast forecastToAdd = MockData.getMockLocalForecast();
 
-      when(_repository.fetchAllWeatherData()).thenAnswer((_) => Stream.value(forecasts));
+      when(_repository.fetchAllWeatherData(MockData.fetchUserEmail())).thenAnswer((_) => Stream.value(forecasts));
 
       expectLater(_bloc.forecastsStream, emitsInOrder([
         emits(forecasts),
@@ -110,7 +110,7 @@ void main() {
         emits(anything)
       ]));
 
-      await _bloc.fetchAllForecastsForUser();
+      await _bloc.fetchAllForecastsForUser(MockData.fetchUserEmail());
       _bloc.fetchForecastForLocation(forecastToAdd.locationName);
     });
 
@@ -118,7 +118,7 @@ void main() {
       final List<LocalForecast> forecasts = MockData.getMockLocalForecastList(4);
       final LocalForecast forecastToAdd = forecasts[1];
 
-      when(_repository.fetchAllWeatherData()).thenAnswer((_) => Stream.value(forecasts));
+      when(_repository.fetchAllWeatherData(MockData.fetchUserEmail())).thenAnswer((_) => Stream.value(forecasts));
 
       expectLater(_bloc.forecastsStream, emitsInOrder([
         emits(forecasts),
@@ -128,7 +128,7 @@ void main() {
         emits(anything)
       ]));
 
-      await _bloc.fetchAllForecastsForUser();
+      await _bloc.fetchAllForecastsForUser(MockData.fetchUserEmail());
       _bloc.fetchForecastForLocation(forecastToAdd.locationName);
 
     });
@@ -137,9 +137,9 @@ void main() {
       final List<LocalForecast> forecasts = MockData.getMockLocalForecastList(4);
       final LocalForecast forecastToAdd = forecasts[1];
 
-      when(_repository.fetchAllWeatherData()).thenAnswer((_) => Stream.value(forecasts));
+      when(_repository.fetchAllWeatherData(MockData.fetchUserEmail())).thenAnswer((_) => Stream.value(forecasts));
 
-      await _bloc.fetchAllForecastsForUser();
+      await _bloc.fetchAllForecastsForUser(MockData.fetchUserEmail());
       bool alreadyAdded = _bloc.locationAlreadyExists(forecastToAdd.locationName);
 
       expect(alreadyAdded, true);
@@ -161,13 +161,13 @@ void main() {
     test('general error scenario for all locations', () async {
       final error = Error();
 
-      when(_repository.fetchAllWeatherData()).thenAnswer((_) => Stream.error(error));
+      when(_repository.fetchAllWeatherData(MockData.fetchUserEmail())).thenAnswer((_) => Stream.error(error));
 
       expectLater(_bloc.forecastsStream, emitsInOrder([
         emitsError(error)
       ]));
 
-      await _bloc.fetchAllForecastsForUser();
+      await _bloc.fetchAllForecastsForUser(MockData.fetchUserEmail());
     });
   });
 

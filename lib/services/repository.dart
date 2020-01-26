@@ -9,7 +9,7 @@ abstract class Repository {
 
   Stream<GoogleUser> authenticateUser(final bool signInSilently);
   Stream<LocalForecast> fetchWeatherDataForLocation(final String location);
-  Stream<List<LocalForecast>> fetchAllWeatherData();
-  Stream<bool> removeLocation(final String location);
-  Stream<bool> saveNewLocation(final String location);
+  Stream<List<LocalForecast>> fetchAllWeatherData(final String userEmail);
+  Stream<bool> removeLocation(final String userEmail, final String location);
+  Stream<bool> saveNewLocation(final String userEmail, final String location);
 }
